@@ -304,14 +304,6 @@ header input {
 
 /* CARD ZONE */
 
-.hide-card {
-  display: none;
-}
-
-.show-card {
-  display: block;
-}
-
 .all-card-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -321,7 +313,6 @@ header input {
 
 /* card skull*/
 .div-card {
-  display: block;
   height: 400px;
   width: 25vw;
   display: flex;
@@ -401,6 +392,14 @@ header input {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.hide-card {
+  display: none;
+}
+
+.show-card {
+  display: block;
 }
 
 @media screen and (max-width: 1440px) {

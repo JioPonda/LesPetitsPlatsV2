@@ -8,52 +8,45 @@ async function getRecipes() {
   return { recipes: data.recipes };
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+/**** BASE ****/
+
+function searchAlgoV1() {
   const searchBar = document.querySelector("#searchbar");
   const searchBarIngredient = document.getElementById("ingredient");
   const searchBarAppareils = document.getElementById("appareils");
   const searchBarUstensiles = document.getElementById("ustensiles");
   const recipesContainer = document.querySelector(".all-card-container");
-
   const divCard = document.querySelectorAll(".div-card");
+  const divTitle = document.querySelectorAll(".card-title");
   const errorMessage = document.querySelector("#error-search");
-  /*********************************************  ALGORYTHME DE RECHERCHE V1 *********************************************************/
+  /****  ALGORYTHME DE RECHERCHE V1 ****/
 
   /** Recherche par noms des plats **/
 
   searchBar.addEventListener("keyup", function () {
     const searchDish = searchBar.value.toLowerCase();
+    if (searchDish.length > 3) {
+      getRecipes().then((data) => {
+        const recipesList = data.recipes;
 
-    if (searchDish === "") {
-      recipesContainer.style.display = "grid";
+        const filteredRecipes = recipesList.filter((recipe) => {
+          return recipe.name.toLowerCase().includes(searchDish);
+        });
+
+        console.log(filteredRecipes);
+
+        divCard.forEach((card, index) => {
+          const title = divTitle[index].textContent.toLowerCase();
+          if (!title.includes(searchDish)) {
+            card.classList.add("hide-card");
+            card.classList.remove("show-card");
+          } else {
+            card.classList.add("show-card");
+            card.classList.remove("hide-card");
+          }
+        });
+      });
     }
-
-    getRecipes().then((data) => {
-      const recipesList = data.recipes;
-
-      const filteredRecipes = recipesList.filter((recipe) => {
-        return recipe.name.toLowerCase().includes(searchDish);
-      });
-
-      console.log(filteredRecipes);
-      console.log(divCard);
-      divCard.forEach((card) => {
-        const divTitle = card.getAttribute("card-title").toLowerCase();
-        if (
-          divTitle.includes(
-            filteredRecipes.map((recipe) => recipe.name.toLowerCase())
-          )
-        ) {
-          card.classList.add("show-card");
-          card.classList.remove("hide-card");
-          console.log("la recette est inclue");
-        } else {
-          card.classList.add("hide-card");
-          card.classList.remove("show-card");
-          console.log("la recette n'est pas inclue");
-        }
-      });
-    });
   });
 
   /** recherche par ingrédients **/
@@ -69,23 +62,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
       });
       console.log(filteredIngredients);
-      filteredIngredients.forEach((e) => {
-        /** Pour chaqque element de notre ingredientList */
-        /** Element du DOM */
-        const suggestionIngredients = document.getElementById(
-          "suggestions-ingredient"
-        );
-        const pIngredient =
-          document.createElement("p"); /** Nous créeons un lien */
-        pIngredient.setAttribute("id", "pIngredient");
-        /** Texte et implémentation*/
-        pIngredient.textContent =
-          e; /** pour chaque lien crée nous ajoutons en texte un ingrédients */
-        suggestionIngredients.appendChild(
-          pIngredient
-        ); /** notre DIV suggestion-ingredient enfante de chaque lien 
-        crée précédemment */
-      });
     });
   });
 
@@ -116,13 +92,15 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log(filteredRecipes);
     });
   });
+}
 
-  /** Affichage **/
+/** Initialisation des données des recipes pour la recherche */
+async function initSearch() {
+  const { recipes } =
+    await getRecipes(); /** Récupére les données des récipes avant recherche*/
+  searchAlgoV1(
+    recipes
+  ); /** Apelle de la fonction de rercherche des données des récipes */
+}
 
-  function displayIngredientList() {
-    const divIngredient = document.getElementById("suggestions-ingredient");
-    divIngredient.style.display = "grid";
-    const chevronIngredient = document.querySelector(".chevron-ingredients");
-    chevronIngredient.style.transform = "rotate(180deg)";
-  }
-});
+initSearch();
