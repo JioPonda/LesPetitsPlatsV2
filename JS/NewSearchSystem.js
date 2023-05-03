@@ -47,6 +47,12 @@ function searchAlgoV1() {
         });
       });
     }
+    if (searchDish == "") {
+      divCard.forEach((card) => {
+        card.classList.add("show-card");
+        card.classList.remove("hide-card");
+      });
+    }
   });
 
   /** recherche par ingrédients **/
