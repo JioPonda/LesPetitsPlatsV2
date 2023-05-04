@@ -1,0 +1,79 @@
+async function getRecipes() {
+  const res = await fetch("JS/recipes.json");
+  const data = await res.json();
+  return { recipes: data.recipes };
+}
+
+function searchByNameAndIngredients(searchDish) {
+  const cardTitle = document.querySelectorAll(".card-title");
+  const cardIngredient = document.querySelectorAll(".span-ingredient");
+  const card = document.querySelectorAll(".div-card");
+
+  getRecipes().then((data) => {
+    const recipesList = data.recipes;
+    const filteredRecipes = recipesList.filter((recipe) => {
+      const ingredients = recipe.ingredients.map((ingredient) =>
+        ingredient.ingredient.toLowerCase()
+      );
+      return recipe.name.toLowerCase().includes(searchDish.toLowerCase());
+    });
+
+    card.forEach((card, index) => {
+      const title = cardTitle[index].textContent.toLowerCase();
+      const ingredients = cardIngredient[index].textContent.toLowerCase();
+      if (
+        !filteredRecipes.some(
+          (recipe) =>
+            recipe.name.toLowerCase() === title &&
+            recipe.ingredients.some((ingredient) =>
+              ingredients.includes(
+                ingredient.ingredient
+                  .toLowerCase()
+                  .includes(searchDish.toLowerCase())
+              )
+            )
+        )
+      ) {
+        card.classList.add("hide-card");
+        card.classList.remove("show-card");
+      } else {
+        card.classList.add("show-card");
+        card.classList.remove("hide-card");
+      }
+    });
+  });
+}
+
+function searchAlgoV1() {
+  const searchBar = document.querySelector("#searchbar");
+  const card = document.querySelectorAll(".div-card");
+
+  searchBar.addEventListener("keyup", function () {
+    const searchDish = searchBar.value.toLowerCase();
+    if (searchDish.length >= 3) {
+      searchByNameAndIngredients(searchDish);
+    } else {
+      card.forEach((card) => {
+        card.classList.add("show-card");
+        card.classList.remove("hide-card");
+      });
+    }
+    if (searchDish.length < 3) {
+      card.forEach((card) => {
+        card.classList.add("show-card");
+        card.classList.remove("hide-card");
+      });
+    }
+  });
+}
+
+/** Initialisation des données des recipes pour la recherche */
+async function initSearch() {
+  const { recipes } =
+    await getRecipes(); /** Récupére les données des récipes avant recherche*/
+  searchAlgoV1(
+    recipes
+  ); /** Apelle de la fonction de rercherche des données des récipes */
+}
+
+initSearch();

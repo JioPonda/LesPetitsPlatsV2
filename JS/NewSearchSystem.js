@@ -1,5 +1,3 @@
-/*****************************************************  BASES  ********************************************************************/
-
 /** ---------- FETCH DATA pour récupérer les infos des photographes du fichier JSON ---------- */
 
 async function getRecipes() {
@@ -16,16 +14,19 @@ function searchAlgoV1() {
   const searchBarAppareils = document.getElementById("appareils");
   const searchBarUstensiles = document.getElementById("ustensiles");
   const recipesContainer = document.querySelector(".all-card-container");
-  const divCard = document.querySelectorAll(".div-card");
+  const card = document.querySelectorAll(".div-card");
   const cardTitle = document.querySelectorAll(".card-title");
   const cardIngretient = document.querySelectorAll(".span-ingredient");
   const cardDescription = document.querySelectorAll(".card-description");
   const errorMessage = document.querySelector("#error-search");
+
   /****  ALGORYTHME DE RECHERCHE V1 ****/
 
   searchBar.addEventListener("keyup", function () {
     /****/
+    /****/
     /** Recherche par noms des plats **/
+
     const searchDish = searchBar.value.toLowerCase();
     if (searchDish.length >= 3) {
       getRecipes().then((data) => {
@@ -36,9 +37,12 @@ function searchAlgoV1() {
 
         console.log(filteredRecipes);
 
-        divCard.forEach((card, index) => {
+        card.forEach((card, index) => {
           const title = cardTitle[index].textContent.toLowerCase();
-          if (!title.includes(searchDish)) {
+          const filteredRecipeNames = filteredRecipes.map((recipe) =>
+            recipe.name.toLowerCase()
+          );
+          if (!filteredRecipeNames.includes(title)) {
             card.classList.add("hide-card");
             card.classList.remove("show-card");
           } else {
@@ -48,14 +52,11 @@ function searchAlgoV1() {
         });
       });
     }
-    if (searchDish.length < 3) {
-      divCard.forEach((card) => {
-        card.classList.add("show-card");
-        card.classList.remove("hide-card");
-      });
-    }
+
+    /****/
     /****/
     /** recherche par ingrédients **/
+
     getRecipes().then((data) => {
       const ingredientsList = data.recipes;
       const filteredIngredients = ingredientsList.filter((recipe) => {
@@ -65,9 +66,15 @@ function searchAlgoV1() {
       });
       console.log(filteredIngredients);
 
-      divCard.forEach((card, index) => {
-        const title = cardTitle[index].textContent.toLowerCase();
-        if (!title.includes(searchDish)) {
+      card.forEach((card, index) => {
+        const ingredients = cardIngretient[index].textContent.toLowerCase();
+        if (
+          !filteredIngredients.some((recipe) =>
+            recipe.ingredients.some((ingredient) =>
+              ingredients.includes(ingredient.ingredient.toLowerCase())
+            )
+          )
+        ) {
           card.classList.add("hide-card");
           card.classList.remove("show-card");
         } else {
@@ -76,69 +83,88 @@ function searchAlgoV1() {
         }
       });
     });
+
+    /****/
     /****/
     /** Recherche par appliance **/
-    getRecipes().then((data) => {
-      const recipesList = data.recipes;
-      const filteredRecipes = recipesList.filter((recipe) => {
-        return recipe.appliance.toLowerCase().includes(searchDish);
-      });
-      console.log(filteredRecipes);
-    });
+
+    // getRecipes().then((data) => {
+    //   const recipesList = data.recipes;
+    //   const filteredRecipes = recipesList.filter((recipe) => {
+    //     return recipe.appliance.toLowerCase().includes(searchDish);
+    //   });
+    //   console.log(filteredRecipes);
+    // });
+
+    /****/
     /****/
     /** Recherche par ustensils **/
-    getRecipes().then((data) => {
-      const recipesList = data.recipes;
-      const filteredRecipes = recipesList.filter((recipe) => {
-        return recipe.ustensils.some((ustensil) => {
-          return ustensil.toLowerCase().includes(searchDish);
-        });
+
+    //   getRecipes().then((data) => {
+    //     const recipesList = data.recipes;
+    //     const filteredRecipes = recipesList.filter((recipe) => {
+    //       return recipe.ustensils.some((ustensil) => {
+    //         return ustensil.toLowerCase().includes(searchDish);
+    //       });
+    //     });
+    //     console.log(filteredRecipes);
+    //   });
+    // });
+
+    /****/
+    /****/
+    /** recherche dans la barre ingrédients **/
+
+    // searchBarIngredient.addEventListener("keyup", function () {
+    //   const searchIngredient = searchBarIngredient.value.toLowerCase();
+
+    //   getRecipes().then((data) => {
+    //     const ingredientsList = data.recipes;
+    //     const filteredIngredients = ingredientsList.filter((recipe) => {
+    //       return recipe.ingredients.some((ingredient) =>
+    //         ingredient.ingredient.toLowerCase().includes(searchIngredient)
+    //       );
+    //     });
+    //     console.log(filteredIngredients);
+    //   });
+    // });
+
+    /****/
+    /****/
+    /** Recherche dans la barre appliance **/
+
+    // searchBarAppareils.addEventListener("keyup", function () {
+    //   const searchAppliance = searchBarAppareils.value.toLowerCase();
+    //   getRecipes().then((data) => {
+    //     const recipesList = data.recipes;
+    //     const filteredRecipes = recipesList.filter((recipe) => {
+    //       return recipe.appliance.toLowerCase().includes(searchAppliance);
+    //     });
+    //     console.log(filteredRecipes);
+    //   });
+    // });
+
+    /****/
+    /****/
+    /** Recherche dans la barre ustensils **/
+
+    // searchBarUstensiles.addEventListener("keyup", function () {
+    //   const searchUstensil = searchBarUstensiles.value.toLowerCase();
+    //   getRecipes().then((data) => {
+    //     const recipesList = data.recipes;
+    //     const filteredRecipes = recipesList.filter((recipe) => {
+    //       return recipe.ustensils.some((ustensil) => {
+    //         return ustensil.toLowerCase().includes(searchUstensil);
+    //       });
+    //     });
+    //     console.log(filteredRecipes);
+    //   });
+    if (searchDish.length < 3) {
+      card.forEach((card) => {
+        card.classList.add("show-card");
+        card.classList.remove("hide-card");
       });
-      console.log(filteredRecipes);
-    });
-  });
-
-  /** recherche des ingrédients **/
-  searchBarIngredient.addEventListener("keyup", function () {
-    const searchIngredient = searchBarIngredient.value.toLowerCase();
-
-    getRecipes().then((data) => {
-      const ingredientsList = data.recipes;
-      const filteredIngredients = ingredientsList.filter((recipe) => {
-        return recipe.ingredients.some((ingredient) =>
-          ingredient.ingredient.toLowerCase().includes(searchIngredient)
-        );
-      });
-      console.log(filteredIngredients);
-    });
-  });
-
-  /** Recherche par appliance **/
-
-  searchBarAppareils.addEventListener("keyup", function () {
-    const searchAppliance = searchBarAppareils.value.toLowerCase();
-    getRecipes().then((data) => {
-      const recipesList = data.recipes;
-      const filteredRecipes = recipesList.filter((recipe) => {
-        return recipe.appliance.toLowerCase().includes(searchAppliance);
-      });
-      console.log(filteredRecipes);
-    });
-  });
-
-  /** Recherche par ustensils **/
-
-  searchBarUstensiles.addEventListener("keyup", function () {
-    const searchUstensil = searchBarUstensiles.value.toLowerCase();
-    getRecipes().then((data) => {
-      const recipesList = data.recipes;
-      const filteredRecipes = recipesList.filter((recipe) => {
-        return recipe.ustensils.some((ustensil) => {
-          return ustensil.toLowerCase().includes(searchUstensil);
-        });
-      });
-      console.log(filteredRecipes);
-    });
+    }
   });
 }
 
