@@ -6,6 +6,8 @@ async function getRecipes() {
   return { recipes: data.recipes };
 }
 
+// Factory pour la création de card
+
 function filteredCardFactory(data) {
   const {
     id,
@@ -102,7 +104,10 @@ function filteredCardFactory(data) {
   };
 }
 
+/****  ALGORYTHME DE RECHERCHE V1 ****/
+
 function searchAlgoV1() {
+  // Base
   const searchBar = document.querySelector("#searchbar");
   const searchBarIngredient = document.getElementById("ingredient");
   const searchBarAppareils = document.getElementById("appareils");
@@ -117,8 +122,7 @@ function searchAlgoV1() {
   const cardDescription = document.querySelectorAll(".card-description");
   const errorMessage = document.querySelector("#error-search");
 
-  /****  ALGORYTHME DE RECHERCHE V1 ****/
-
+  // Event listner
   searchBar.addEventListener("keyup", function () {
     const searchDish = searchBar.value.toLowerCase();
     if (searchDish.length >= 3) {
@@ -126,17 +130,21 @@ function searchAlgoV1() {
       filteredCardContainer.style.display = "grid";
       getRecipes().then((data) => {
         const recipesList = data.recipes;
+        // filtre de recherche des plats
         const filteredRecipes = recipesList.filter((recipe) => {
           return recipe.name.toLowerCase().includes(searchDish);
         });
+        // filtre de recherche des ingrédients
         const filteredIngredients = recipesList.filter((recipe) => {
           return recipe.ingredients.some((ingredient) =>
             ingredient.ingredient.toLowerCase().includes(searchDish)
           );
         });
+        // filtre de recherche des appliance
         const filteredAppliance = recipesList.filter((appliance) => {
           return appliance.appliance.toLowerCase().includes(searchDish);
         });
+        // filtre de recherche des ustensiles
         const filteredUstensils = recipesList.filter((recipe) => {
           return recipe.ustensils.some((ustensil) => {
             return ustensil.toLowerCase().includes(searchDish);
@@ -149,33 +157,32 @@ function searchAlgoV1() {
         console.log(filteredUstensils);
         filteredCardContainer.innerHTML = "";
 
-        /****/
-        /****/
-        /** Recherche par noms des plats **/
+        // Afichage par noms des plats
         filteredRecipes.forEach((recipes) => {
           const filteredModelpage = filteredCardFactory(recipes);
           const filteredCardDOMpage = filteredModelpage.getFilteredCardDOM();
           filteredCardContainer.appendChild(filteredCardDOMpage);
         });
-        /****/
-        /****/
-        /** recherche par ingrédients **/
+        // Afichage par ingrédients
         filteredIngredients.forEach((ingredient) => {
           const filteredModelpage = filteredCardFactory(ingredient);
           const filteredCardDOMpage = filteredModelpage.getFilteredCardDOM();
           filteredCardContainer.appendChild(filteredCardDOMpage);
         });
+        // Afichage par appliance
         filteredAppliance.forEach((appliance) => {
           const filteredModelpage = filteredCardFactory(appliance);
           const filteredCardDOMpage = filteredModelpage.getFilteredCardDOM();
           filteredCardContainer.appendChild(filteredCardDOMpage);
         });
+        // Afichage par ustensils
         filteredUstensils.forEach((ustensil) => {
           const filteredModelpage = filteredCardFactory(ustensil);
           const filteredCardDOMpage = filteredModelpage.getFilteredCardDOM();
           filteredCardContainer.appendChild(filteredCardDOMpage);
         });
       });
+      // si la barre de recherche est vide
       if (searchDish.length < 3) {
         recipesContainer.style.display = "grid";
         filteredCardContainer.style.display = "none";
