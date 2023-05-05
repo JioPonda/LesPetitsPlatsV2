@@ -302,7 +302,7 @@ header input {
   cursor: pointer;
 }
 
-/* CARD ZONE */
+/* ALL CARD ZONE */
 
 .all-card-container {
   display: grid;
@@ -394,12 +394,104 @@ header input {
   overflow: hidden;
 }
 
-.hide-card {
+/* A LAISSER POUR TEST LE NEWSEARCHSYSTEM.JS */
+/* .hide-card {
   display: none;
 }
 
 .show-card {
   display: block;
+} */
+
+/* FILTERED CARD ZONE */
+.filtered-card-container {
+  display: none;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2vw;
+  margin: 50px 0 50px 4vw;
+}
+
+/* filtered card skull*/
+.filtered-card {
+  height: 400px;
+  width: 25vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.filtered-grey-zone {
+  height: 50%;
+  width: 100%;
+  background: #c7bebe;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.filtered-card-infos {
+  height: 50%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background: #e7e7e7;
+  border-radius: 0px 0px 5px 5px;
+}
+
+/* card infos left */
+.filtered-recipes {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.filtered-card-title {
+  margin-left: 5%;
+  font-size: 1.125em;
+}
+
+.filtered-span-ingredient {
+  margin: 0px 0 0 1vw;
+}
+
+.filtered-card-ingredient {
+  font-size: 0.75em;
+  margin-top: -5px;
+}
+
+/* card infos right */
+
+.filtered-div-description {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.filtered-div-time {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.filtered-card-clock {
+  padding-right: 0.5em;
+  height: 1.563em;
+  width: 1.563em;
+}
+
+.filtered-card-time {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.filtered-card-description {
+  /* height: 45%; */
+  width: 10vw;
+  margin-right: 12%;
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 0.75em;
+  -webkit-line-clamp: 4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 1440px) {
@@ -413,7 +505,7 @@ header input {
 
   .card-ingredient {
     font-size: 0.6em;
-    margin-top: 10px;
+    margin-top: -3px;
   }
 
   .card-clock {
@@ -427,6 +519,27 @@ header input {
   }
 
   .card-description {
+    font-size: 0.65em;
+    margin-top: 30px;
+    margin-left: 5px;
+  }
+
+  .filtered-card-ingredient {
+    font-size: 0.6em;
+    margin-top: -4px;
+  }
+
+  .filtered-card-clock {
+    padding-right: 1.5em;
+    height: 1em;
+    width: 1em;
+  }
+
+  .filtered-card-time {
+    font-size: 15px;
+  }
+
+  .filtered-card-description {
     font-size: 0.65em;
     margin-top: 30px;
     margin-left: 5px;
