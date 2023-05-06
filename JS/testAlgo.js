@@ -1,3 +1,5 @@
+/** ---------- FETCH DATA pour récupérer les infos des recettes du fichier JSON ---------- */
+
 async function getRecipes() {
   const res = await fetch("JS/recipes.json");
   const data = await res.json();
@@ -20,6 +22,11 @@ function filteredCardFactory(data) {
   const clock = "assets/clock.png";
 
   function getFilteredCardDOM() {
+    const existingCard = document.getElementById(`card-${id}`);
+    if (existingCard) {
+      return existingCard;
+    }
+
     /** Squelette de la card */
     const filteredCard = document.createElement("article");
     filteredCard.setAttribute("class", "filtered-card");
@@ -102,55 +109,59 @@ function filteredCardFactory(data) {
   };
 }
 
-/****  ALGORYTHME DE RECHERCHE V1 ****/
-
-function searchAlgo() {
-  // Base
+function searchAlgoV2() {
   const searchBar = document.querySelector("#searchbar");
+  const searchBarIngredient = document.getElementById("ingredient");
+  const searchBarAppareils = document.getElementById("appareils");
+  const searchBarUstensiles = document.getElementById("ustensiles");
   const recipesContainer = document.querySelector(".all-card-container");
   const filteredCardContainer = document.querySelector(
     ".filtered-card-container"
   );
   const errorMessage = document.querySelector("#error-search");
 
-  // Event listner
+  const allCardData = []; // tableau pour stocker toutes les cartes
+  getRecipes().then((data) => {
+    data.recipes.forEach((recipe) => {
+      const card = filteredCardFactory(recipe);
+      allCardData.push(card); // Ajouter la carte à notre tableau
+    });
+  });
+
   searchBar.addEventListener("keyup", function () {
-    const searchDish = searchBar.value.toLowerCase().trim();
-    if (searchDish.length >= 3) {
+    const searchValue = searchBar.value.toLowerCase();
+    if (searchValue.length >= 3) {
+      // Recherche par noms des plats, ingrédients, appareils ou ustensiles
+      const filteredData = allCardData.filter((card) => {
+        return (
+          card.name.toLowerCase().includes(searchValue) ||
+          card.ingredients.some((ingredient) =>
+            ingredient.ingredient.toLowerCase().includes(searchValue)
+          ) ||
+          card.appliance.toLowerCase().includes(searchValue) ||
+          card.ustensils.some((ustensil) =>
+            ustensil.toLowerCase().includes(searchValue)
+          )
+        );
+      });
+
+      // Afficher les résultats de la recherche
       recipesContainer.style.display = "none";
       filteredCardContainer.style.display = "grid";
-      getRecipes().then((data) => {
-        const recipesList = data.recipes;
-        const filteredRecipes = recipesList.filter((recipe) => {
-          // Rechercher le terme dans le nom de la recette, le nom de l'ingrédient,
-          // le nom de l'appareil et le nom de l'ustensile
-          return (
-            recipe.name.toLowerCase().includes(searchDish) ||
-            recipe.ingredients.some((ingredient) =>
-              ingredient.ingredient.toLowerCase().includes(searchDish)
-            ) ||
-            recipe.appliance.toLowerCase().includes(searchDish) ||
-            recipe.ustensils.some((ustensil) =>
-              ustensil.toLowerCase().includes(searchDish)
-            )
-          );
+      filteredCardContainer.innerHTML = "";
+
+      if (filteredData.length === 0) {
+        // Afficher un message d'erreur si aucun résultat trouvé
+        errorMessage.style.display = "block";
+      } else {
+        errorMessage.style.display = "none";
+        filteredData.forEach((card) => {
+          const cardDOM = card.getFilteredCardDOM();
+          filteredCardContainer.appendChild(cardDOM);
         });
-        // Supprimer les anciennes cartes de la grille de cartes filtrées
-        filteredCardContainer.innerHTML = "";
-        // Créer de nouvelles cartes pour chaque recette filtrée
-        filteredRecipes.forEach((recipe) => {
-          const filteredCard = filteredCardFactory(recipe);
-          const filteredCardDOM = filteredCard.getFilteredCardDOM();
-          filteredCardContainer.appendChild(filteredCardDOM);
-        });
-        // Afficher un message d'erreur si aucune recette ne correspond à la recherche
-        if (filteredRecipes.length === 0) {
-          errorMessage.style.display = "block";
-        } else {
-          errorMessage.style.display = "none";
-        }
-      });
+      }
     } else {
+      // Si la barre de recherche est vide, afficher toutes les cartes
       recipesContainer.style.display = "grid";
       filteredCardContainer.style.display = "none";
       errorMessage.style.display = "none";
@@ -162,9 +173,59 @@ function searchAlgo() {
 async function initSearch() {
   const { recipes } =
     await getRecipes(); /** Récupére les données des récipes avant recherche*/
-  searchAlgo(
+  searchAlgoV2(
     recipes
   ); /** Apelle de la fonction de rercherche des données des récipes */
 }
 
 initSearch();
+
+/** RECHERCHE DANS LES BARRE DE TAGS **/
+/** recherche dans la barre ingrédients **/
+
+// searchBarIngredient.addEventListener("keyup", function () {
+//   const searchIngredient = searchBarIngredient.value.toLowerCase();
+
+//   getRecipes().then((data) => {
+//     const ingredientsList = data.recipes;
+//     const filteredIngredients = ingredientsList.filter((recipe) => {
+//       return recipe.ingredients.some((ingredient) =>
+//         ingredient.ingredient.toLowerCase().includes(searchIngredient)
+//       );
+//     });
+//     console.log(filteredIngredients);
+//   });
+// });
+
+/****/
+/****/
+/** Recherche dans la barre appliance **/
+
+// searchBarAppareils.addEventListener("keyup", function () {
+//   const searchAppliance = searchBarAppareils.value.toLowerCase();
+//   getRecipes().then((data) => {
+//     const recipesList = data.recipes;
+//     const filteredRecipes = recipesList.filter((recipe) => {
+//       return recipe.appliance.toLowerCase().includes(searchAppliance);
+//     });
+//     console.log(filteredRecipes);
+//   });
+// });
+
+/****/
+/****/
+/** Recherche dans la barre ustensils **/
+
+// searchBarUstensiles.addEventListener("keyup", function () {
+//   const searchUstensil = searchBarUstensiles.value.toLowerCase();
+//   getRecipes().then((data) => {
+//     const recipesList = data.recipes;
+//     const filteredRecipes = recipesList.filter((recipe) => {
+//       return recipe.ustensils.some((ustensil) => {
+//         return ustensil.toLowerCase().includes(searchUstensil);
+//       });
+//     });
+//     console.log(filteredRecipes);
+//   });
+
+// VERSION FONCTIONELLE MAIS RECHERCHE DANS LES CARDS
