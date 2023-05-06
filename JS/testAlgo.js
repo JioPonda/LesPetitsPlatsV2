@@ -227,5 +227,3 @@ initSearch();
 //     });
 //     console.log(filteredRecipes);
 //   });
-
-// VERSION FONCTIONELLE MAIS RECHERCHE DANS LES CARDS
