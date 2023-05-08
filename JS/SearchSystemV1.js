@@ -407,8 +407,7 @@ function factorySearch(data) {
       crossTag.setAttribute("onclick", "hideTag ()");
 
       if ((e.key === "Enter") & (appareilSearch.value !== "")) {
-        /** Si la touche ENTER et que la valeur de la zone de recherche n'est pas vide alors il crée un tag */ aTag.textContent =
-          appareilSearch.value;
+        aTag.textContent = appareilSearch.value;
         crossTag.setAttribute("id", "crossed-appareils");
         crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
         crossTag.setAttribute("onclick", "hideTag ()");
@@ -486,8 +485,8 @@ function factorySearch(data) {
   /** Affichage des tag ustensiles via la touche ENTER */
   const ustensileSearch = document.querySelector("#ustensiles");
   ustensileSearch.addEventListener("keyup", function (e) {
-    /** Création d'une écoute d'évenement sur notre zone de saisie */ let ustensileEnterCardArray =
-      [];
+    /** Création d'une écoute d'évenement sur notre zone de saisie */
+    let ustensileEnterCardArray = [];
     if (
       e.key === "Enter" &&
       ustensilslList.includes(ustensileSearch.value.toLowerCase())

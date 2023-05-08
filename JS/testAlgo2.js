@@ -1,10 +1,16 @@
+/*************************************************/
+/********** RECUPERATION DES DONEES **************/
+/*************************************************/
+
 async function getRecipes() {
   const res = await fetch("JS/recipes.json");
   const data = await res.json();
   return { recipes: data.recipes };
 }
 
-// Factory pour la création de card
+/*************************************************/
+/***** FACTORY POUR LA CREACTION DE LA CARD ******/
+/*************************************************/
 
 function filteredCardFactory(data) {
   const {
@@ -102,7 +108,10 @@ function filteredCardFactory(data) {
   };
 }
 
-/****  ALGORYTHME DE RECHERCHE V1 ****/
+/*************************************************/
+/*******  ALGORYTHME DE RECHERCHE V1 *************/
+/*************************************************/
+
 function searchAlgo() {
   // Base
   const searchBar = document.querySelector("#searchbar");
@@ -159,7 +168,10 @@ function searchAlgo() {
   });
 }
 
+/*************************************************/
 /**** RECHERCHE DANS LA BARRE DES INGREDIENTS ****/
+/*************************************************/
+
 function ingredientSearch() {
   /** BASE **/
   const divIngredient = document.getElementById("suggestions-ingredient");
@@ -196,19 +208,60 @@ function ingredientSearch() {
       pIngredient.setAttribute("id", "pIngredient");
       pIngredient.textContent = ingredient;
       suggestionIngredients.appendChild(pIngredient);
+      pIngredient.addEventListener("click", function () {
+        const pIngredientsText = pIngredient.textContent;
+        const tag = document.getElementById("ingredient-tag-liste");
+        const divTag = document.createElement("div");
+        divTag.setAttribute("class", "tag-ingredient");
+        const iTag = document.createElement("p");
+        iTag.setAttribute("class", "text-ingredient-tag");
+        const crossTag = document.createElement("i");
+        crossTag.setAttribute("id", "crossed-appareils");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        iTag.textContent = pIngredientsText;
+        crossTag.setAttribute("id", "crossed-appareils");
+        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        divTag.appendChild(iTag);
+        divTag.appendChild(crossTag);
+        tag.appendChild(divTag);
+        console.log("tag crée");
+      });
     });
-    searchBarIngredient.addEventListener("keyup", function () {
+    searchBarIngredient.addEventListener("keyup", function (e) {
       // console.log(ingredientsList);
       ingredientsList.forEach((ingredient) => {
         if (ingredient.toLowerCase().includes(searchIngredient)) {
           console.log("l'ingrédient est contenue");
         }
       });
+      if (e.key === "Enter") {
+        const searchIngredientsText = searchBarIngredient.value;
+        const tag = document.getElementById("ingredient-tag-liste");
+        const divTag = document.createElement("div");
+        divTag.setAttribute("class", "tag-ingredient");
+        const iTag = document.createElement("p");
+        iTag.setAttribute("class", "text-ingredient-tag");
+        const crossTag = document.createElement("i");
+        crossTag.setAttribute("id", "crossed-appareils");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        iTag.textContent = searchIngredientsText;
+        crossTag.setAttribute("id", "crossed-appareils");
+        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        divTag.appendChild(iTag);
+        divTag.appendChild(crossTag);
+        tag.appendChild(divTag);
+        console.log("tag crée");
+      }
     });
   });
 }
 
+/*************************************************/
 /**** RECHERCHE DANS LA BARRE DES APPAREILS ****/
+/*************************************************/
+
 function applianceSearch() {
   /** BASE **/
   const divAppareils = document.getElementById("suggestions-appareils");
@@ -237,19 +290,60 @@ function applianceSearch() {
       pAppareils.setAttribute("id", "pAppareils");
       pAppareils.textContent = appliance;
       suggestionAppareils.appendChild(pAppareils);
+      pAppareils.addEventListener("click", function () {
+        const pApplianceText = pAppareils.textContent;
+        const tag = document.getElementById("appareil-tag-liste");
+        const divTag = document.createElement("div");
+        divTag.setAttribute("class", "tag-appareil");
+        const aTag = document.createElement("p");
+        aTag.setAttribute("class", "text-appareil-tag");
+        const crossTag = document.createElement("i");
+        crossTag.setAttribute("id", "crossed-appareils");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        aTag.textContent = pApplianceText;
+        crossTag.setAttribute("id", "crossed-appareils");
+        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        divTag.appendChild(aTag);
+        divTag.appendChild(crossTag);
+        tag.appendChild(divTag);
+        console.log("tag crée");
+      });
     });
-    searchBarAppareils.addEventListener("keyup", function () {
-      console.log(applianceList);
+    searchBarAppareils.addEventListener("keyup", function (e) {
+      // console.log(applianceList);
       applianceList.forEach((appliance) => {
         if (appliance.toLowerCase().includes(searchAppliance)) {
           console.log("l'appareil est contenue");
         }
       });
+      if (e.key === "Enter") {
+        const searchApplianceText = searchBarAppareils.value;
+        const tag = document.getElementById("appareil-tag-liste");
+        const divTag = document.createElement("div");
+        divTag.setAttribute("class", "tag-appareil");
+        const aTag = document.createElement("p");
+        aTag.setAttribute("class", "text-appareil-tag");
+        const crossTag = document.createElement("i");
+        crossTag.setAttribute("id", "crossed-appareils");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        aTag.textContent = searchApplianceText;
+        crossTag.setAttribute("id", "crossed-appareils");
+        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        divTag.appendChild(aTag);
+        divTag.appendChild(crossTag);
+        tag.appendChild(divTag);
+        console.log("tag crée");
+      }
     });
   });
 }
 
+/*************************************************/
 /**** RECHERCHE DANS LA BARRE DES USTENSILES ****/
+/*************************************************/
+
 function ustensilsSearch() {
   /** BASE **/
   const divUstensiles = document.getElementById("suggestions-ustensiles");
@@ -279,17 +373,58 @@ function ustensilsSearch() {
       pUstensils.setAttribute("id", "pUstensils");
       pUstensils.textContent = ustensil;
       suggestionUstensils.appendChild(pUstensils);
+      pUstensils.addEventListener("click", function () {
+        const pUstensilText = pUstensils.textContent;
+        const tag = document.getElementById("ustensile-tag-liste");
+        const divTag = document.createElement("div");
+        divTag.setAttribute("class", "tag-ustensile");
+        const uTag = document.createElement("p");
+        uTag.setAttribute("class", "text-ustensile-tag");
+        const crossTag = document.createElement("i");
+        crossTag.setAttribute("id", "crossed-ustensiles");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        uTag.textContent = pUstensilText;
+        crossTag.setAttribute("id", "crossed-ustensiles");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        divTag.appendChild(uTag);
+        divTag.appendChild(crossTag);
+        tag.appendChild(divTag);
+        console.log("tag crée");
+      });
     });
-    searchBarUstensiles.addEventListener("keyup", function () {
+
+    searchBarUstensiles.addEventListener("keyup", function (e) {
       // console.log(ustensilsList);
-      ustensilsList.forEach((ingredient) => {
-        if (ingredient.toLowerCase().includes(searchUstensil)) {
+      ustensilsList.forEach((ustensil) => {
+        if (ustensil.toLowerCase().includes(searchUstensil)) {
           console.log("l'ustensile est contenue");
         }
       });
+      if (e.key === "Enter") {
+        const searchUstensilText = searchBarUstensiles.value;
+        const tag = document.getElementById("ustensile-tag-liste");
+        const divTag = document.createElement("div");
+        divTag.setAttribute("class", "tag-ustensile");
+        const uTag = document.createElement("p");
+        uTag.setAttribute("class", "text-ustensile-tag");
+        const crossTag = document.createElement("i");
+        crossTag.setAttribute("id", "crossed-ustensiles");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        uTag.textContent = searchUstensilText;
+        crossTag.setAttribute("id", "crossed-ustensiles");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        divTag.appendChild(uTag);
+        divTag.appendChild(crossTag);
+        tag.appendChild(divTag);
+        console.log("tag crée");
+      }
     });
   });
 }
+
+/*************************************************/
 
 /** Initialisation des données des recipes pour la recherche */
 async function initSearch() {
@@ -302,6 +437,9 @@ async function initSearch() {
 
 initSearch();
 
+/*************************************************/
+
+/*************************************************/
 /** Masquer la liste d'ingrédient */
 function hideIngredientList() {
   const divIngredient = document.getElementById("suggestions-ingredient");
@@ -328,3 +466,41 @@ function hideUstensilesList() {
   chevronUstensiles.style.transform = "rotate(0)";
   divUstensiles.innerHTML = "";
 }
+
+/** Suppression des tags */
+function hideTag() {
+  let crossedIngredient = document.querySelectorAll("#crossed-ingredient");
+  let tagIngredientListe = [];
+  let crossedAppareils = document.querySelectorAll("#crossed-appareils");
+  let tagAppareilsListe = [];
+  let crossedUstensiles = document.querySelectorAll("#crossed-ustensiles");
+  let tagUstensilesListe = [];
+
+  for (let crossI = 0; crossI < crossedIngredient.length; crossI++) {
+    const tagIngredient = document.querySelectorAll(".tag-ingredient");
+    for (let tI = 0; tI < tagIngredient.length; tI++)
+      crossedIngredient[crossI].addEventListener("click", function () {
+        tagIngredient[tI].remove();
+        tagIngredientListe.push(tagIngredient[tI].textContent);
+      });
+  }
+
+  for (let crossA = 0; crossA < crossedAppareils.length; crossA++) {
+    const tagAppareils = document.querySelectorAll(".tag-appareil");
+    for (let tA = 0; tA < tagAppareils.length; tA++)
+      crossedAppareils[crossA].addEventListener("click", function () {
+        tagAppareils[tA].remove();
+        tagAppareilsListe.push(tagAppareils[tA].textContent);
+      });
+  }
+
+  for (let crossU = 0; crossU < crossedUstensiles.length; crossU++) {
+    const tagUstensiles = document.querySelectorAll(".tag-ustensile");
+    for (let tU = 0; tU < tagUstensiles.length; tU++)
+      crossedUstensiles[crossU].addEventListener("click", function () {
+        tagUstensiles[tU].remove();
+        tagUstensilesListe.push(tagUstensiles[tU].textContent);
+      });
+  }
+}
+/*************************************************/
