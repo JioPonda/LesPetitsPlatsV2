@@ -524,6 +524,10 @@ header input {
     margin-left: 5px;
   }
 
+  .filtered-card-title {
+    font-size: 0.8em;
+  }
+
   .filtered-card-ingredient {
     font-size: 0.6em;
     margin-top: -4px;
