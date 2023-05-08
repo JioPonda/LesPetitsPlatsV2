@@ -103,10 +103,11 @@ function filteredCardFactory(data) {
 }
 
 /****  ALGORYTHME DE RECHERCHE V1 ****/
-
 function searchAlgo() {
   // Base
   const searchBar = document.querySelector("#searchbar");
+  const searchBarAppareils = document.getElementById("appareils");
+  const searchBarUstensiles = document.getElementById("ustensiles");
   const recipesContainer = document.querySelector(".all-card-container");
   const filteredCardContainer = document.querySelector(
     ".filtered-card-container"
@@ -158,6 +159,138 @@ function searchAlgo() {
   });
 }
 
+/**** RECHERCHE DANS LA BARRE DES INGREDIENTS ****/
+function ingredientSearch() {
+  /** BASE **/
+  const divIngredient = document.getElementById("suggestions-ingredient");
+  divIngredient.style.display = "grid";
+  const chevronIngredient = document.querySelector(".chevron-ingredients");
+  chevronIngredient.style.transform = "rotate(180deg)";
+
+  const searchBarIngredient = document.getElementById("ingredient");
+  const searchIngredient = searchBarIngredient.value.toLowerCase();
+
+  const suggestionIngredients = document.getElementById(
+    "suggestions-ingredient"
+  );
+  /** FILTRE ET AFFFICHAGE DES INGREDIENTS **/
+  getRecipes().then((data) => {
+    divIngredient.innerHTML = "";
+    const ingredientsArray = [];
+    const ingredientsArray2 = [];
+    data.recipes.forEach((recipe) => {
+      recipe.ingredients.forEach((ingredient) => {
+        ingredientsArray.push(ingredient);
+      });
+    });
+    // console.log(ingredientsArray);
+    ingredientsArray.forEach((ingredient) => {
+      ingredientsArray2.push(ingredient.ingredient.toLowerCase());
+    });
+    // console.log(ingredientsArray2);
+    const ingredientsList = ingredientsArray2.filter(
+      (x, i) => ingredientsArray2.indexOf(x) === i
+    );
+    ingredientsList.forEach((ingredient) => {
+      const pIngredient = document.createElement("p");
+      pIngredient.setAttribute("id", "pIngredient");
+      pIngredient.textContent = ingredient;
+      suggestionIngredients.appendChild(pIngredient);
+    });
+    searchBarIngredient.addEventListener("keyup", function () {
+      // console.log(ingredientsList);
+      ingredientsList.forEach((ingredient) => {
+        if (ingredient.toLowerCase().includes(searchIngredient)) {
+          console.log("l'ingrédient est contenue");
+        }
+      });
+    });
+  });
+}
+
+/**** RECHERCHE DANS LA BARRE DES APPAREILS ****/
+function applianceSearch() {
+  /** BASE **/
+  const divAppareils = document.getElementById("suggestions-appareils");
+  divAppareils.style.display = "grid";
+  const chevronAppareils = document.querySelector(".chevron-appareils");
+  chevronAppareils.style.transform = "rotate(180deg)";
+
+  const searchBarAppareils = document.getElementById("appareils");
+  const searchAppliance = searchBarAppareils.value.toLowerCase();
+
+  const suggestionAppareils = document.getElementById("suggestions-appareils");
+
+  /** FILTRE ET AFFFICHAGE DES APPAREILS **/
+  getRecipes().then((data) => {
+    divAppareils.innerHTML = "";
+    const applianceArray = [];
+    data.recipes.forEach((recipe) => {
+      applianceArray.push(recipe.appliance);
+    });
+    // console.log(applianceArray);
+    const applianceList = applianceArray.filter(
+      (x, i) => applianceArray.indexOf(x) === i
+    );
+    applianceList.forEach((appliance) => {
+      const pAppareils = document.createElement("p");
+      pAppareils.setAttribute("id", "pAppareils");
+      pAppareils.textContent = appliance;
+      suggestionAppareils.appendChild(pAppareils);
+    });
+    searchBarAppareils.addEventListener("keyup", function () {
+      console.log(applianceList);
+      applianceList.forEach((appliance) => {
+        if (appliance.toLowerCase().includes(searchAppliance)) {
+          console.log("l'appareil est contenue");
+        }
+      });
+    });
+  });
+}
+
+/**** RECHERCHE DANS LA BARRE DES USTENSILES ****/
+function ustensilsSearch() {
+  /** BASE **/
+  const divUstensiles = document.getElementById("suggestions-ustensiles");
+  divUstensiles.style.display = "grid";
+  const chevronUstensiles = document.querySelector(".chevron-ustensiles");
+  chevronUstensiles.style.transform = "rotate(180deg)";
+
+  const searchBarUstensiles = document.getElementById("ustensiles");
+  const searchUstensil = searchBarUstensiles.value.toLowerCase();
+
+  const suggestionUstensils = document.getElementById("suggestions-ustensiles");
+  /** FILTRE ET AFFFICHAGE DES USTENSILES **/
+  getRecipes().then((data) => {
+    divUstensiles.innerHTML = "";
+    const ustensilsArray = [];
+    data.recipes.forEach((recipe) => {
+      recipe.ustensils.forEach((ustensil) => {
+        ustensilsArray.push(ustensil);
+      });
+    });
+    // console.log(ustensilsArray);
+    const ustensilsList = ustensilsArray.filter(
+      (x, i) => ustensilsArray.indexOf(x) === i
+    );
+    ustensilsList.forEach((ustensil) => {
+      const pUstensils = document.createElement("p");
+      pUstensils.setAttribute("id", "pUstensils");
+      pUstensils.textContent = ustensil;
+      suggestionUstensils.appendChild(pUstensils);
+    });
+    searchBarUstensiles.addEventListener("keyup", function () {
+      // console.log(ustensilsList);
+      ustensilsList.forEach((ingredient) => {
+        if (ingredient.toLowerCase().includes(searchUstensil)) {
+          console.log("l'ustensile est contenue");
+        }
+      });
+    });
+  });
+}
+
 /** Initialisation des données des recipes pour la recherche */
 async function initSearch() {
   const { recipes } =
@@ -168,3 +301,30 @@ async function initSearch() {
 }
 
 initSearch();
+
+/** Masquer la liste d'ingrédient */
+function hideIngredientList() {
+  const divIngredient = document.getElementById("suggestions-ingredient");
+  divIngredient.style.display = "none";
+  const chevronIngredient = document.querySelector(".chevron-ingredients");
+  chevronIngredient.style.transform = "rotate(0)";
+  divIngredient.innerHTML = "";
+}
+
+/** Masquer la liste d'appareils */
+function hideAppareilsList() {
+  const divAppareils = document.getElementById("suggestions-appareils");
+  divAppareils.style.display = "none";
+  const chevronAppareils = document.querySelector(".chevron-appareils");
+  chevronAppareils.style.transform = "rotate(0)";
+  divAppareils.innerHTML = "";
+}
+
+/** Masquer la liste d'ustensiles */
+function hideUstensilesList() {
+  const divUstensiles = document.getElementById("suggestions-ustensiles");
+  divUstensiles.style.display = "none";
+  const chevronUstensiles = document.querySelector(".chevron-ustensiles");
+  chevronUstensiles.style.transform = "rotate(0)";
+  divUstensiles.innerHTML = "";
+}
