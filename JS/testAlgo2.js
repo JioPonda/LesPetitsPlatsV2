@@ -216,44 +216,45 @@ function ingredientSearch() {
         const iTag = document.createElement("p");
         iTag.setAttribute("class", "text-ingredient-tag");
         const crossTag = document.createElement("i");
-        crossTag.setAttribute("id", "crossed-appareils");
+        crossTag.setAttribute("id", "crossed-ingredient");
         crossTag.setAttribute("onclick", "hideTag ()");
         iTag.textContent = pIngredientsText;
-        crossTag.setAttribute("id", "crossed-appareils");
+        crossTag.setAttribute("id", "crossed-ingredient");
         crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
         crossTag.setAttribute("onclick", "hideTag ()");
         divTag.appendChild(iTag);
         divTag.appendChild(crossTag);
         tag.appendChild(divTag);
-        console.log("tag crée");
       });
     });
-    searchBarIngredient.addEventListener("keyup", function (e) {
-      // console.log(ingredientsList);
-      ingredientsList.forEach((ingredient) => {
-        if (ingredient.toLowerCase().includes(searchIngredient)) {
-          console.log("l'ingrédient est contenue");
+    const pIngredients = document.querySelectorAll("#pIngredient");
+    searchBarIngredient.addEventListener("keyup", function () {
+      pIngredients.forEach((p) => {
+        if (p.textContent.includes(searchIngredient)) {
+          p.style.display = "none";
+        } else {
+          p.style.display = "block";
+        }
+        if (searchIngredient === "") {
+          p.style.display = "block";
         }
       });
-      if (e.key === "Enter") {
-        const searchIngredientsText = searchBarIngredient.value;
-        const tag = document.getElementById("ingredient-tag-liste");
-        const divTag = document.createElement("div");
-        divTag.setAttribute("class", "tag-ingredient");
-        const iTag = document.createElement("p");
-        iTag.setAttribute("class", "text-ingredient-tag");
-        const crossTag = document.createElement("i");
-        crossTag.setAttribute("id", "crossed-appareils");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        iTag.textContent = searchIngredientsText;
-        crossTag.setAttribute("id", "crossed-appareils");
-        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        divTag.appendChild(iTag);
-        divTag.appendChild(crossTag);
-        tag.appendChild(divTag);
-        console.log("tag crée");
-      }
+      // for (let i = 0; i < pIngredient.length; i++) {
+      //   /** Pour chaque appareil */
+      //   if (pIngredient[i].textContent.includes(searchIngredient)) {
+      //     /** si notre appareil saisie et inclus dans notre liste */
+      //     pIngredient[i].style.display =
+      //       "block"; /** Alors l'appareil reste affiché */
+      //   } else {
+      //     pIngredient[i].style.display = "none"; /** Sinon il disparais*/
+      //   }
+
+      //   if (searchIngredient === "") {
+      //     /** Si la zone de saisie est vide*/
+      //     pIngredient[i].style.display =
+      //       "block"; /** Alors les appareils restent affiché */
+      //   }
+      // }
     });
   });
 }
@@ -307,35 +308,15 @@ function applianceSearch() {
         divTag.appendChild(aTag);
         divTag.appendChild(crossTag);
         tag.appendChild(divTag);
-        console.log("tag crée");
       });
     });
     searchBarAppareils.addEventListener("keyup", function (e) {
       // console.log(applianceList);
       applianceList.forEach((appliance) => {
         if (appliance.toLowerCase().includes(searchAppliance)) {
-          console.log("l'appareil est contenue");
+          // console.log("l'appareil est contenue");
         }
       });
-      if (e.key === "Enter") {
-        const searchApplianceText = searchBarAppareils.value;
-        const tag = document.getElementById("appareil-tag-liste");
-        const divTag = document.createElement("div");
-        divTag.setAttribute("class", "tag-appareil");
-        const aTag = document.createElement("p");
-        aTag.setAttribute("class", "text-appareil-tag");
-        const crossTag = document.createElement("i");
-        crossTag.setAttribute("id", "crossed-appareils");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        aTag.textContent = searchApplianceText;
-        crossTag.setAttribute("id", "crossed-appareils");
-        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        divTag.appendChild(aTag);
-        divTag.appendChild(crossTag);
-        tag.appendChild(divTag);
-        console.log("tag crée");
-      }
     });
   });
 }
@@ -398,28 +379,9 @@ function ustensilsSearch() {
       // console.log(ustensilsList);
       ustensilsList.forEach((ustensil) => {
         if (ustensil.toLowerCase().includes(searchUstensil)) {
-          console.log("l'ustensile est contenue");
+          // console.log("l'ustensile est contenue");
         }
       });
-      if (e.key === "Enter") {
-        const searchUstensilText = searchBarUstensiles.value;
-        const tag = document.getElementById("ustensile-tag-liste");
-        const divTag = document.createElement("div");
-        divTag.setAttribute("class", "tag-ustensile");
-        const uTag = document.createElement("p");
-        uTag.setAttribute("class", "text-ustensile-tag");
-        const crossTag = document.createElement("i");
-        crossTag.setAttribute("id", "crossed-ustensiles");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        uTag.textContent = searchUstensilText;
-        crossTag.setAttribute("id", "crossed-ustensiles");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
-        divTag.appendChild(uTag);
-        divTag.appendChild(crossTag);
-        tag.appendChild(divTag);
-        console.log("tag crée");
-      }
     });
   });
 }
