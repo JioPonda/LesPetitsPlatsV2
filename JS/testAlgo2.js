@@ -235,10 +235,10 @@ function displayIngredients(ingredientsList) {
   const pIngredients = suggestionIngredients.querySelectorAll("p");
 
   searchBarIngredient.addEventListener("keyup", function () {
-    searchIngredient = searchBarIngredient.value.toLowerCase();
+    let searchIngredient = searchBarIngredient.value.toLowerCase();
 
     // Recréer la liste d'ingrédients correspondant à la recherche
-    matchingIngredients = ingredientsList.filter((ingredient) => {
+    let matchingIngredients = ingredientsList.filter((ingredient) => {
       return ingredient.includes(searchIngredient);
     });
 
@@ -264,85 +264,91 @@ function ingredientSearch() {
   });
 }
 
-// for (let i = 0; i < pIngredient.length; i++) {
-//   /** Pour chaque appareil */
-//   if (pIngredient[i].textContent.includes(searchIngredient)) {
-//     /** si notre appareil saisie et inclus dans notre liste */
-//     pIngredient[i].style.display =
-//       "block"; /** Alors l'appareil reste affiché */
-//   } else {
-//     pIngredient[i].style.display = "none"; /** Sinon il disparais*/
-//   }
-
-//   if (searchIngredient === "") {
-//     /** Si la zone de saisie est vide*/
-//     pIngredient[i].style.display =
-//       "block"; /** Alors les appareils restent affiché */
-//   }
-// }
-
 /*************************************************/
 /**** RECHERCHE DANS LA BARRE DES APPAREILS ****/
 /*************************************************/
 
+function getAppliance() {
+  return getRecipes().then((data) => {
+    const applianceArray = [];
+    data.recipes.forEach((recipe) => {
+      applianceArray.push(recipe.appliance);
+    });
+    const applianceList = applianceArray.filter(
+      (x, i) => applianceArray.indexOf(x) === i
+    );
+    return applianceList;
+  });
+}
+
+function displayAppliance(applianceList) {
+  const suggestionAppareils = document.getElementById("suggestions-appareils");
+  suggestionAppareils.innerHTML = "";
+  const searchBarAppareils = document.getElementById("appareils");
+  let searchAppliance = searchBarAppareils.value.toLowerCase();
+
+  // Créer une nouvelle liste d'appareils correspondant à la recherche
+  let matchingAppareils = applianceList.filter((appliance) => {
+    return appliance.toLowerCase().includes(searchAppliance);
+  });
+
+  matchingAppareils.forEach((appliance) => {
+    const pAppareils = document.createElement("p");
+    pAppareils.textContent = appliance;
+    pAppareils.setAttribute("id", "pAppareils");
+    suggestionAppareils.appendChild(pAppareils);
+    pAppareils.addEventListener("click", function () {
+      const pApplianceText = pAppareils.textContent;
+      const tag = document.getElementById("tag-liste");
+      const divTag = document.createElement("div");
+      divTag.setAttribute("class", "tag-appareil");
+      const aTag = document.createElement("p");
+      aTag.setAttribute("class", "text-appareil-tag");
+      aTag.textContent = pApplianceText;
+      const crossTag = document.createElement("i");
+      crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+      crossTag.setAttribute("onclick", "hideTag ()");
+      divTag.appendChild(aTag);
+      divTag.appendChild(crossTag);
+      tag.appendChild(divTag);
+      tagArray.push(pApplianceText);
+      console.log(tagArray);
+    });
+  });
+
+  const pAppareils = suggestionAppareils.querySelectorAll("p");
+
+  searchBarAppareils.addEventListener("keyup", function () {
+    let searchAppliance = searchBarAppareils.value.toLowerCase();
+
+    // Recréer la liste d'appareils correspondant à la recherche
+    let matchingAppareils = applianceList.filter((appliance) => {
+      return appliance.includes(searchAppliance);
+    });
+
+    // Afficher uniquement les éléments de la liste correspondant à la recherche
+    pAppareils.forEach((p) => {
+      if (matchingAppareils.includes(p.textContent.toLowerCase())) {
+        p.style.display = "block";
+      } else {
+        p.style.display = "none";
+      }
+    });
+  });
+}
+
 function applianceSearch() {
-  /** BASE **/
   const divAppareils = document.getElementById("suggestions-appareils");
   divAppareils.style.display = "grid";
   const chevronAppareils = document.querySelector(".chevron-appareils");
   chevronAppareils.style.transform = "rotate(180deg)";
 
-  const searchBarAppareils = document.getElementById("appareils");
-  const searchAppliance = searchBarAppareils.value.toLowerCase();
-
-  const suggestionAppareils = document.getElementById("suggestions-appareils");
-
-  /** FILTRE ET AFFFICHAGE DES APPAREILS **/
-  getRecipes().then((data) => {
-    divAppareils.innerHTML = "";
-    const applianceArray = [];
-    data.recipes.forEach((recipe) => {
-      applianceArray.push(recipe.appliance);
-    });
-    // console.log(applianceArray);
-    const applianceList = applianceArray.filter(
-      (x, i) => applianceArray.indexOf(x) === i
-    );
-    applianceList.forEach((appliance) => {
-      const pAppareils = document.createElement("p");
-      pAppareils.setAttribute("id", "pAppareils");
-      pAppareils.textContent = appliance;
-      suggestionAppareils.appendChild(pAppareils);
-      pAppareils.addEventListener("click", function () {
-        const pApplianceText = pAppareils.textContent;
-        const tag = document.getElementById("tag-liste");
-        const divTag = document.createElement("div");
-        divTag.setAttribute("class", "tag-appareil");
-        const aTag = document.createElement("p");
-        aTag.setAttribute("class", "text-appareil-tag");
-        const crossTag = document.createElement("i");
-        crossTag.setAttribute("id", "crossed-appareils");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        aTag.textContent = pApplianceText;
-        crossTag.setAttribute("id", "crossed-appareils");
-        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        divTag.appendChild(aTag);
-        divTag.appendChild(crossTag);
-        tag.appendChild(divTag);
-      });
-    });
-    searchBarAppareils.addEventListener("keyup", function (e) {
-      // console.log(applianceList);
-      applianceList.forEach((appliance) => {
-        if (appliance.toLowerCase().includes(searchAppliance)) {
-          // console.log("l'appareil est contenue");
-        }
-      });
-    });
+  getAppliance().then((applianceList) => {
+    displayAppliance(applianceList);
   });
 }
 
+/** FILTRE ET AFFFICHAGE DES APPAREILS **/
 /*************************************************/
 /**** RECHERCHE DANS LA BARRE DES USTENSILES ****/
 /*************************************************/
