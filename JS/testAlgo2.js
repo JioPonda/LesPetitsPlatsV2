@@ -108,6 +108,8 @@ function filteredCardFactory(data) {
   };
 }
 
+function factoryTagIngredients() {}
+
 /*************************************************/
 /*******  ALGORYTHME DE RECHERCHE V1 *************/
 /*************************************************/
@@ -144,6 +146,7 @@ function searchAlgo() {
               ustensil.toLowerCase().includes(searchDish)
             )
           );
+          // faire la recherche par tag ici par le tableau tagArray
         });
         // Supprimer les anciennes cartes de la grille de cartes filtrées
         filteredCardContainer.innerHTML = "";
@@ -172,92 +175,111 @@ function searchAlgo() {
 /**** RECHERCHE DANS LA BARRE DES INGREDIENTS ****/
 /*************************************************/
 
-function ingredientSearch() {
-  /** BASE **/
-  const divIngredient = document.getElementById("suggestions-ingredient");
-  divIngredient.style.display = "grid";
-  const chevronIngredient = document.querySelector(".chevron-ingredients");
-  chevronIngredient.style.transform = "rotate(180deg)";
-
-  const searchBarIngredient = document.getElementById("ingredient");
-  const searchIngredient = searchBarIngredient.value.toLowerCase();
-
-  const suggestionIngredients = document.getElementById(
-    "suggestions-ingredient"
-  );
-  /** FILTRE ET AFFFICHAGE DES INGREDIENTS **/
-  getRecipes().then((data) => {
-    divIngredient.innerHTML = "";
+function getIngredients() {
+  return getRecipes().then((data) => {
     const ingredientsArray = [];
-    const ingredientsArray2 = [];
     data.recipes.forEach((recipe) => {
       recipe.ingredients.forEach((ingredient) => {
         ingredientsArray.push(ingredient);
       });
     });
-    // console.log(ingredientsArray);
-    ingredientsArray.forEach((ingredient) => {
-      ingredientsArray2.push(ingredient.ingredient.toLowerCase());
-    });
-    // console.log(ingredientsArray2);
+    const ingredientsArray2 = ingredientsArray.map((ingredient) =>
+      ingredient.ingredient.toLowerCase()
+    );
     const ingredientsList = ingredientsArray2.filter(
       (x, i) => ingredientsArray2.indexOf(x) === i
     );
-    ingredientsList.forEach((ingredient) => {
-      const pIngredient = document.createElement("p");
-      pIngredient.setAttribute("id", "pIngredient");
-      pIngredient.textContent = ingredient;
-      suggestionIngredients.appendChild(pIngredient);
-      pIngredient.addEventListener("click", function () {
-        const pIngredientsText = pIngredient.textContent;
-        const tag = document.getElementById("ingredient-tag-liste");
-        const divTag = document.createElement("div");
-        divTag.setAttribute("class", "tag-ingredient");
-        const iTag = document.createElement("p");
-        iTag.setAttribute("class", "text-ingredient-tag");
-        const crossTag = document.createElement("i");
-        crossTag.setAttribute("id", "crossed-ingredient");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        iTag.textContent = pIngredientsText;
-        crossTag.setAttribute("id", "crossed-ingredient");
-        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        divTag.appendChild(iTag);
-        divTag.appendChild(crossTag);
-        tag.appendChild(divTag);
-      });
-    });
-    const pIngredients = document.querySelectorAll("#pIngredient");
-    searchBarIngredient.addEventListener("keyup", function () {
-      pIngredients.forEach((p) => {
-        if (p.textContent.includes(searchIngredient)) {
-          p.style.display = "none";
-        } else {
-          p.style.display = "block";
-        }
-        if (searchIngredient === "") {
-          p.style.display = "block";
-        }
-      });
-      // for (let i = 0; i < pIngredient.length; i++) {
-      //   /** Pour chaque appareil */
-      //   if (pIngredient[i].textContent.includes(searchIngredient)) {
-      //     /** si notre appareil saisie et inclus dans notre liste */
-      //     pIngredient[i].style.display =
-      //       "block"; /** Alors l'appareil reste affiché */
-      //   } else {
-      //     pIngredient[i].style.display = "none"; /** Sinon il disparais*/
-      //   }
+    return ingredientsList;
+  });
+}
 
-      //   if (searchIngredient === "") {
-      //     /** Si la zone de saisie est vide*/
-      //     pIngredient[i].style.display =
-      //       "block"; /** Alors les appareils restent affiché */
-      //   }
-      // }
+let tagArray = [];
+
+function displayIngredients(ingredientsList) {
+  const suggestionIngredients = document.getElementById(
+    "suggestions-ingredient"
+  );
+  suggestionIngredients.innerHTML = "";
+  const searchBarIngredient = document.getElementById("ingredient");
+  let searchIngredient = searchBarIngredient.value.toLowerCase();
+
+  // Créer une nouvelle liste d'ingrédients correspondant à la recherche
+  let matchingIngredients = ingredientsList.filter((ingredient) => {
+    return ingredient.includes(searchIngredient);
+  });
+
+  matchingIngredients.forEach((ingredient) => {
+    const pIngredient = document.createElement("p");
+    pIngredient.textContent = ingredient;
+    pIngredient.setAttribute("id", "pIngredient");
+    suggestionIngredients.appendChild(pIngredient);
+    pIngredient.addEventListener("click", function () {
+      const pIngredientsText = pIngredient.textContent;
+      const tag = document.getElementById("tag-liste");
+      const divTag = document.createElement("div");
+      divTag.setAttribute("class", "tag-ingredient");
+      const iTag = document.createElement("p");
+      iTag.setAttribute("class", "text-ingredient-tag");
+      iTag.textContent = pIngredientsText;
+      const crossTag = document.createElement("i");
+      crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+      crossTag.setAttribute("onclick", "hideTag()");
+      divTag.appendChild(iTag);
+      divTag.appendChild(crossTag);
+      tag.appendChild(divTag);
+      tagArray.push(pIngredientsText);
+      console.log(tagArray);
+    });
+  });
+
+  const pIngredients = suggestionIngredients.querySelectorAll("p");
+
+  searchBarIngredient.addEventListener("keyup", function () {
+    searchIngredient = searchBarIngredient.value.toLowerCase();
+
+    // Recréer la liste d'ingrédients correspondant à la recherche
+    matchingIngredients = ingredientsList.filter((ingredient) => {
+      return ingredient.includes(searchIngredient);
+    });
+
+    // Afficher uniquement les éléments de la liste correspondant à la recherche
+    pIngredients.forEach((p) => {
+      if (matchingIngredients.includes(p.textContent)) {
+        p.style.display = "block";
+      } else {
+        p.style.display = "none";
+      }
     });
   });
 }
+
+function ingredientSearch() {
+  const divIngredient = document.getElementById("suggestions-ingredient");
+  divIngredient.style.display = "grid";
+  const chevronIngredient = document.querySelector(".chevron-ingredients");
+  chevronIngredient.style.transform = "rotate(180deg)";
+
+  getIngredients().then((ingredientsList) => {
+    displayIngredients(ingredientsList);
+  });
+}
+
+// for (let i = 0; i < pIngredient.length; i++) {
+//   /** Pour chaque appareil */
+//   if (pIngredient[i].textContent.includes(searchIngredient)) {
+//     /** si notre appareil saisie et inclus dans notre liste */
+//     pIngredient[i].style.display =
+//       "block"; /** Alors l'appareil reste affiché */
+//   } else {
+//     pIngredient[i].style.display = "none"; /** Sinon il disparais*/
+//   }
+
+//   if (searchIngredient === "") {
+//     /** Si la zone de saisie est vide*/
+//     pIngredient[i].style.display =
+//       "block"; /** Alors les appareils restent affiché */
+//   }
+// }
 
 /*************************************************/
 /**** RECHERCHE DANS LA BARRE DES APPAREILS ****/
@@ -293,7 +315,7 @@ function applianceSearch() {
       suggestionAppareils.appendChild(pAppareils);
       pAppareils.addEventListener("click", function () {
         const pApplianceText = pAppareils.textContent;
-        const tag = document.getElementById("appareil-tag-liste");
+        const tag = document.getElementById("tag-liste");
         const divTag = document.createElement("div");
         divTag.setAttribute("class", "tag-appareil");
         const aTag = document.createElement("p");
@@ -356,7 +378,7 @@ function ustensilsSearch() {
       suggestionUstensils.appendChild(pUstensils);
       pUstensils.addEventListener("click", function () {
         const pUstensilText = pUstensils.textContent;
-        const tag = document.getElementById("ustensile-tag-liste");
+        const tag = document.getElementById("tag-liste");
         const divTag = document.createElement("div");
         divTag.setAttribute("class", "tag-ustensile");
         const uTag = document.createElement("p");
