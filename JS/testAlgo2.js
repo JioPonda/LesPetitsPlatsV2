@@ -272,7 +272,7 @@ function getAppliance() {
   return getRecipes().then((data) => {
     const applianceArray = [];
     data.recipes.forEach((recipe) => {
-      applianceArray.push(recipe.appliance);
+      applianceArray.push(recipe.appliance.toLowerCase());
     });
     const applianceList = applianceArray.filter(
       (x, i) => applianceArray.indexOf(x) === i
@@ -289,7 +289,7 @@ function displayAppliance(applianceList) {
 
   // Créer une nouvelle liste d'appareils correspondant à la recherche
   let matchingAppareils = applianceList.filter((appliance) => {
-    return appliance.toLowerCase().includes(searchAppliance);
+    return appliance.includes(searchAppliance);
   });
 
   matchingAppareils.forEach((appliance) => {
@@ -328,7 +328,7 @@ function displayAppliance(applianceList) {
 
     // Afficher uniquement les éléments de la liste correspondant à la recherche
     pAppareils.forEach((p) => {
-      if (matchingAppareils.includes(p.textContent.toLowerCase())) {
+      if (matchingAppareils.includes(p.textContent)) {
         p.style.display = "block";
       } else {
         p.style.display = "none";
@@ -348,7 +348,6 @@ function applianceSearch() {
   });
 }
 
-/** FILTRE ET AFFFICHAGE DES APPAREILS **/
 /*************************************************/
 /**** RECHERCHE DANS LA BARRE DES USTENSILES ****/
 /*************************************************/
