@@ -352,20 +352,8 @@ function applianceSearch() {
 /**** RECHERCHE DANS LA BARRE DES USTENSILES ****/
 /*************************************************/
 
-function ustensilsSearch() {
-  /** BASE **/
-  const divUstensiles = document.getElementById("suggestions-ustensiles");
-  divUstensiles.style.display = "grid";
-  const chevronUstensiles = document.querySelector(".chevron-ustensiles");
-  chevronUstensiles.style.transform = "rotate(180deg)";
-
-  const searchBarUstensiles = document.getElementById("ustensiles");
-  const searchUstensil = searchBarUstensiles.value.toLowerCase();
-
-  const suggestionUstensils = document.getElementById("suggestions-ustensiles");
-  /** FILTRE ET AFFFICHAGE DES USTENSILES **/
-  getRecipes().then((data) => {
-    divUstensiles.innerHTML = "";
+function getUstensils() {
+  return getRecipes().then((data) => {
     const ustensilsArray = [];
     data.recipes.forEach((recipe) => {
       recipe.ustensils.forEach((ustensil) => {
@@ -376,10 +364,26 @@ function ustensilsSearch() {
     const ustensilsList = ustensilsArray.filter(
       (x, i) => ustensilsArray.indexOf(x) === i
     );
-    ustensilsList.forEach((ustensil) => {
+    return ustensilsList;
+  });
+}
+
+function displayUstensiles() {
+  const suggestionUstensils = document.getElementById("suggestions-ustensiles");
+  suggestionUstensils.innerHTML = "";
+  const searchBarUstensiles = document.getElementById("ustensiles");
+  let searchUstensil = searchBarUstensiles.value.toLowerCase();
+
+  getUstensils().then((ustensilsList) => {
+    // Créer une nouvelle liste d'ustensiles correspondant à la recherche
+    let matchingUstensils = ustensilsList.filter((ustensil) => {
+      return ustensil.includes(searchUstensil);
+    });
+
+    matchingUstensils.forEach((ustensil) => {
       const pUstensils = document.createElement("p");
-      pUstensils.setAttribute("id", "pUstensils");
       pUstensils.textContent = ustensil;
+      pUstensils.setAttribute("id", "pUstensils");
       suggestionUstensils.appendChild(pUstensils);
       pUstensils.addEventListener("click", function () {
         const pUstensilText = pUstensils.textContent;
@@ -388,28 +392,48 @@ function ustensilsSearch() {
         divTag.setAttribute("class", "tag-ustensile");
         const uTag = document.createElement("p");
         uTag.setAttribute("class", "text-ustensile-tag");
-        const crossTag = document.createElement("i");
-        crossTag.setAttribute("id", "crossed-ustensiles");
-        crossTag.setAttribute("onclick", "hideTag ()");
         uTag.textContent = pUstensilText;
-        crossTag.setAttribute("id", "crossed-ustensiles");
-        crossTag.setAttribute("onclick", "hideTag ()");
+        const crossTag = document.createElement("i");
         crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        crossTag.setAttribute("onclick", "hideTag ()");
         divTag.appendChild(uTag);
         divTag.appendChild(crossTag);
         tag.appendChild(divTag);
-        console.log("tag crée");
+        tagArray.push(pUstensilText);
+        console.log(tagArray);
       });
     });
 
-    searchBarUstensiles.addEventListener("keyup", function (e) {
-      // console.log(ustensilsList);
-      ustensilsList.forEach((ustensil) => {
-        if (ustensil.toLowerCase().includes(searchUstensil)) {
-          // console.log("l'ustensile est contenue");
+    const pUstensils = suggestionUstensils.querySelectorAll("p");
+
+    searchBarUstensiles.addEventListener("keyup", function () {
+      let searchUstensil = searchBarUstensiles.value.toLowerCase();
+
+      // Recréer la liste d'ustensils correspondant à la recherche
+      let matchingUstensils = ustensilsList.filter((ustensil) => {
+        return ustensil.includes(searchUstensil);
+      });
+
+      // Afficher uniquement les éléments de la liste correspondant à la recherche
+      pUstensils.forEach((p) => {
+        if (matchingUstensils.includes(p.textContent)) {
+          p.style.display = "block";
+        } else {
+          p.style.display = "none";
         }
       });
     });
+  });
+}
+
+function ustensilsSearch() {
+  const divUstensiles = document.getElementById("suggestions-ustensiles");
+  divUstensiles.style.display = "grid";
+  const chevronUstensiles = document.querySelector(".chevron-ustensiles");
+  chevronUstensiles.style.transform = "rotate(180deg)";
+
+  getUstensils().then((ustensilsList) => {
+    displayUstensiles(ustensilsList);
   });
 }
 

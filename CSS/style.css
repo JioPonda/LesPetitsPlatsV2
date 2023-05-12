@@ -53,7 +53,7 @@ header input {
 
 /** tags */
 
-#ingredient-tag-liste {
+#tag-liste {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -80,14 +80,6 @@ header input {
   margin: 0.5em;
 }
 
-#appareil-tag-liste {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 80vw;
-  margin: 15px 0 0 9vw;
-}
-
 .tag-appareil {
   display: flex;
   height: 50px;
@@ -110,14 +102,6 @@ header input {
 .fa-circle-xmark {
   margin: 0.5em;
   cursor: pointer;
-}
-
-#ustensile-tag-liste {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 80vw;
-  margin: 15px 0 0 9vw;
 }
 
 .tag-ustensile {
@@ -639,7 +623,7 @@ header input {
 
   /** tags */
 
-  #ingredient-tag-liste {
+  #tag-liste {
     margin: 5px 0 0 5vw;
   }
 
@@ -648,10 +632,6 @@ header input {
     border-radius: 15px;
     padding: 0.5em;
     margin: 0.5em;
-  }
-
-  #appareil-tag-liste {
-    margin: 5px 0 0 5vw;
   }
 
   .tag-appareil {
@@ -664,10 +644,6 @@ header input {
   .fa-circle-xmark {
     margin: 0.5em;
     cursor: pointer;
-  }
-
-  #ustensile-tag-liste {
-    margin: 5px 0 0 5vw;
   }
 
   .tag-ustensile {
