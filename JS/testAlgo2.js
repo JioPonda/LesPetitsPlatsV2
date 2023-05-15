@@ -215,20 +215,23 @@ function displayIngredients(ingredientsList) {
     suggestionIngredients.appendChild(pIngredient);
     pIngredient.addEventListener("click", function () {
       const pIngredientsText = pIngredient.textContent;
-      const tag = document.getElementById("tag-liste");
-      const divTag = document.createElement("div");
-      divTag.setAttribute("class", "tag-ingredient");
-      const iTag = document.createElement("p");
-      iTag.setAttribute("class", "text-ingredient-tag");
-      iTag.textContent = pIngredientsText;
-      const crossTag = document.createElement("i");
-      crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
-      crossTag.setAttribute("onclick", "hideTag()");
-      divTag.appendChild(iTag);
-      divTag.appendChild(crossTag);
-      tag.appendChild(divTag);
-      tagArray.push(pIngredientsText);
-      console.log(tagArray);
+      if (!tagArray.includes(pIngredientsText.toLowerCase())) {
+        tagArray.push(pIngredientsText.toLowerCase());
+        console.log(tagArray);
+
+        const tag = document.getElementById("tag-liste");
+        const divTag = document.createElement("div");
+        divTag.setAttribute("class", "tag-ingredient");
+        const iTag = document.createElement("p");
+        iTag.setAttribute("class", "text-ingredient-tag");
+        iTag.textContent = pIngredientsText;
+        const crossTag = document.createElement("i");
+        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        crossTag.setAttribute("onclick", "hideTag()");
+        divTag.appendChild(iTag);
+        divTag.appendChild(crossTag);
+        tag.appendChild(divTag);
+      }
     });
   });
 
@@ -299,20 +302,22 @@ function displayAppliance(applianceList) {
     suggestionAppareils.appendChild(pAppareils);
     pAppareils.addEventListener("click", function () {
       const pApplianceText = pAppareils.textContent;
-      const tag = document.getElementById("tag-liste");
-      const divTag = document.createElement("div");
-      divTag.setAttribute("class", "tag-appareil");
-      const aTag = document.createElement("p");
-      aTag.setAttribute("class", "text-appareil-tag");
-      aTag.textContent = pApplianceText;
-      const crossTag = document.createElement("i");
-      crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
-      crossTag.setAttribute("onclick", "hideTag ()");
-      divTag.appendChild(aTag);
-      divTag.appendChild(crossTag);
-      tag.appendChild(divTag);
-      tagArray.push(pApplianceText);
-      console.log(tagArray);
+      if (!tagArray.includes(pApplianceText.toLowerCase())) {
+        const tag = document.getElementById("tag-liste");
+        const divTag = document.createElement("div");
+        divTag.setAttribute("class", "tag-appareil");
+        const aTag = document.createElement("p");
+        aTag.setAttribute("class", "text-appareil-tag");
+        aTag.textContent = pApplianceText;
+        const crossTag = document.createElement("i");
+        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        crossTag.setAttribute("onclick", "hideTag ()");
+        divTag.appendChild(aTag);
+        divTag.appendChild(crossTag);
+        tag.appendChild(divTag);
+        tagArray.push(pApplianceText.toLowerCase());
+        console.log(tagArray);
+      }
     });
   });
 
@@ -387,20 +392,22 @@ function displayUstensiles() {
       suggestionUstensils.appendChild(pUstensils);
       pUstensils.addEventListener("click", function () {
         const pUstensilText = pUstensils.textContent;
-        const tag = document.getElementById("tag-liste");
-        const divTag = document.createElement("div");
-        divTag.setAttribute("class", "tag-ustensile");
-        const uTag = document.createElement("p");
-        uTag.setAttribute("class", "text-ustensile-tag");
-        uTag.textContent = pUstensilText;
-        const crossTag = document.createElement("i");
-        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
-        crossTag.setAttribute("onclick", "hideTag ()");
-        divTag.appendChild(uTag);
-        divTag.appendChild(crossTag);
-        tag.appendChild(divTag);
-        tagArray.push(pUstensilText);
-        console.log(tagArray);
+        if (!tagArray.includes(pUstensilText.toLowerCase())) {
+          const tag = document.getElementById("tag-liste");
+          const divTag = document.createElement("div");
+          divTag.setAttribute("class", "tag-ustensile");
+          const uTag = document.createElement("p");
+          uTag.setAttribute("class", "text-ustensile-tag");
+          uTag.textContent = pUstensilText;
+          const crossTag = document.createElement("i");
+          crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+          crossTag.setAttribute("onclick", "hideTag ()");
+          divTag.appendChild(uTag);
+          divTag.appendChild(crossTag);
+          tag.appendChild(divTag);
+          tagArray.push(pUstensilText.toLowerCase());
+          console.log(tagArray);
+        }
       });
     });
 
