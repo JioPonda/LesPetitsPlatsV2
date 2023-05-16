@@ -181,46 +181,51 @@ let tagArray = [];
 // }
 
 function searchByTagAlgo() {
-  // Base
   const filteredCardContainer = document.querySelector(
     ".filtered-card-container"
   );
   const errorMessage = document.querySelector("#error-search");
   const recipesContainer = document.querySelector(".all-card-container");
-  const searchTag = tagArray.map((tag) => tag.toLowerCase().trim());
+  const searchTags = tagArray.map((tag) => tag.toLowerCase().trim());
 
   getRecipes().then((data) => {
     const recipesList = data.recipes;
     const filteredRecipes = recipesList.filter((recipe) => {
-      return (
-        recipe.ingredients.some((ingredient) =>
-          ingredient.ingredient.toLowerCase().includes(searchTag)
-        ) ||
-        recipe.appliance.toLowerCase().includes(searchTag) ||
-        recipe.ustensils.some((ustensil) =>
-          ustensil.toLowerCase().includes(searchTag)
-        )
-      );
+      return searchTags.every((tag) => {
+        return (
+          recipe.ingredients.some((ingredient) =>
+            ingredient.ingredient.toLowerCase().includes(tag)
+          ) ||
+          recipe.appliance.toLowerCase().includes(tag) ||
+          recipe.ustensils.some((ustensil) =>
+            ustensil.toLowerCase().includes(tag)
+          )
+        );
+      });
     });
+
     filteredCardContainer.innerHTML = "";
-    // Créer de nouvelles cartes pour chaque recette filtrée
     filteredRecipes.forEach((recipe) => {
       const filteredCard = filteredCardFactory(recipe);
       const filteredCardDOM = filteredCard.getFilteredCardDOM();
       filteredCardContainer.appendChild(filteredCardDOM);
     });
 
-    // Afficher un message d'erreur si aucune recette ne correspond à la recherche
     if (filteredRecipes.length === 0) {
       errorMessage.style.display = "block";
-      filteredCardArray = [];
     } else {
       errorMessage.style.display = "none";
     }
   });
 
-  recipesContainer.style.display = "none";
-  filteredCardContainer.style.display = "grid";
+  if (searchTags.length >= 1) {
+    recipesContainer.style.display = "none";
+    filteredCardContainer.style.display = "grid";
+  } else {
+    recipesContainer.style.display = "grid";
+    filteredCardContainer.style.display = "none";
+    errorMessage.style.display = "none";
+  }
 }
 
 /*************************************************/
