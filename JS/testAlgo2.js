@@ -118,109 +118,117 @@ let filteredCardArray = [];
 // Tableau contenant les tags crée
 let tagArray = [];
 
-function searchAlgo() {
-  // Base
-  const searchBar = document.querySelector("#searchbar");
-  const searchBarAppareils = document.getElementById("appareils");
-  const searchBarUstensiles = document.getElementById("ustensiles");
-  const recipesContainer = document.querySelector(".all-card-container");
-  const filteredCardContainer = document.querySelector(
-    ".filtered-card-container"
-  );
-  const errorMessage = document.querySelector("#error-search");
+// function searchAlgo() {
+//   // Base
+//   const searchBar = document.querySelector("#searchbar");
+//   const searchBarAppareils = document.getElementById("appareils");
+//   const searchBarUstensiles = document.getElementById("ustensiles");
+//   const recipesContainer = document.querySelector(".all-card-container");
+//   const filteredCardContainer = document.querySelector(
+//     ".filtered-card-container"
+//   );
+//   const errorMessage = document.querySelector("#error-search");
 
-  // Event listner
-  searchBar.addEventListener("keyup", function () {
-    const searchDish = searchBar.value.toLowerCase().trim();
-    if (searchDish.length >= 3) {
-      recipesContainer.style.display = "none";
-      filteredCardContainer.style.display = "grid";
-      getRecipes().then((data) => {
-        const recipesList = data.recipes;
-        const filteredRecipes = recipesList.filter((recipe) => {
-          // Rechercher le terme dans le nom de la recette, le nom de l'ingrédient,
-          // le nom de l'appareil et le nom de l'ustensile
-          return (
-            recipe.name.toLowerCase().includes(searchDish) ||
-            recipe.ingredients.some((ingredient) =>
-              ingredient.ingredient.toLowerCase().includes(searchDish)
-            ) ||
-            recipe.appliance.toLowerCase().includes(searchDish) ||
-            recipe.ustensils.some((ustensil) =>
-              ustensil.toLowerCase().includes(searchDish)
-            )
-          );
-        });
-        filteredCardArray.push(filteredRecipes);
-        console.log(filteredCardArray);
-        // Supprimer les anciennes cartes de la grille de cartes filtrées
-        filteredCardContainer.innerHTML = "";
-        // Créer de nouvelles cartes pour chaque recette filtrée
-        filteredRecipes.forEach((recipe) => {
-          const filteredCard = filteredCardFactory(recipe);
-          const filteredCardDOM = filteredCard.getFilteredCardDOM();
-          filteredCardContainer.appendChild(filteredCardDOM);
-        });
-        // Afficher un message d'erreur si aucune recette ne correspond à la recherche
-        if (filteredRecipes.length === 0) {
-          errorMessage.style.display = "block";
-          filteredCardArray = [];
-        } else {
-          errorMessage.style.display = "none";
-        }
-      });
-    } else {
-      recipesContainer.style.display = "grid";
-      filteredCardContainer.style.display = "none";
-      errorMessage.style.display = "none";
-      filteredCardArray = [];
-    }
-  });
-}
+//   // Event listner
+//   searchBar.addEventListener("keyup", function () {
+//     const searchDish = searchBar.value.toLowerCase().trim();
+//     if (searchDish.length >= 3) {
+//       recipesContainer.style.display = "none";
+//       filteredCardContainer.style.display = "grid";
+//       getRecipes().then((data) => {
+//         const recipesList = data.recipes;
+//         const filteredRecipes = recipesList.filter((recipe) => {
+//           // Rechercher le terme dans le nom de la recette, le nom de l'ingrédient,
+//           // le nom de l'appareil et le nom de l'ustensile
+//           return (
+//             recipe.name.toLowerCase().includes(searchDish) ||
+//             recipe.ingredients.some((ingredient) =>
+//               ingredient.ingredient.toLowerCase().includes(searchDish)
+//             ) ||
+//             recipe.appliance.toLowerCase().includes(searchDish) ||
+//             recipe.ustensils.some((ustensil) =>
+//               ustensil.toLowerCase().includes(searchDish)
+//             )
+//           );
+//         });
+//         filteredCardArray = filteredRecipes.map((recipe) =>
+//           filteredCardFactory(recipe)
+//         );
+//         console.log(filteredCardArray);
+//         // Supprimer les anciennes cartes de la grille de cartes filtrées
+//         filteredCardContainer.innerHTML = "";
+//         // Créer de nouvelles cartes pour chaque recette filtrée
+//         filteredRecipes.forEach((recipe) => {
+//           const filteredCard = filteredCardFactory(recipe);
+//           const filteredCardDOM = filteredCard.getFilteredCardDOM();
+//           filteredCardContainer.appendChild(filteredCardDOM);
+//         });
+//         // Afficher un message d'erreur si aucune recette ne correspond à la recherche
+//         if (filteredRecipes.length === 0) {
+//           errorMessage.style.display = "block";
+//           filteredCardArray = [];
+//         } else {
+//           errorMessage.style.display = "none";
+//         }
+//       });
+//     } else {
+//       recipesContainer.style.display = "grid";
+//       filteredCardContainer.style.display = "none";
+//       errorMessage.style.display = "none";
+//       filteredCardArray = [];
+//     }
+//   });
+// }
 
 function searchByTagAlgo() {
   // Base
-  const searchBar = document.querySelector("#searchbar");
   const filteredCardContainer = document.querySelector(
     ".filtered-card-container"
   );
   const errorMessage = document.querySelector("#error-search");
+  const recipesContainer = document.querySelector(".all-card-container");
+  const searchTag = tagArray.map((tag) => tag.toLowerCase().trim());
 
-  // Event listner
-  searchBar.addEventListener("keyup", function () {
-    const searchTag = tagArray.map((tag) => tag.toLowerCase().trim());
-    const recipesContainerCards = filteredCardArray.map((filteredCard) =>
-      filteredCard.getFilteredCardDOM()
-    );
-    const filteredRecipes = recipesContainerCards.filter((card) => {
-      const cardContent = card.textContent.toLowerCase().trim();
-      // Vérifier si la carte contient tous les éléments du tableau de tags
-      return searchTag.every((tag) => cardContent.includes(tag));
+  if (searchTag.length >= 1) {
+    getRecipes().then((data) => {
+      const recipesList = data.recipes;
+      const filteredRecipes = recipesList.filter((recipe) => {
+        return (
+          recipe.ingredients.some((ingredient) =>
+            ingredient.ingredient.toLowerCase().includes(searchTag)
+          ) ||
+          recipe.appliance.toLowerCase().includes(searchTag) ||
+          recipe.ustensils.some((ustensil) =>
+            ustensil.toLowerCase().includes(searchTag)
+          )
+        );
+      });
+      console.log(filteredRecipes);
+      filteredCardContainer.innerHTML = "";
+      // Créer de nouvelles cartes pour chaque recette filtrée
+      filteredRecipes.forEach((recipe) => {
+        const filteredCard = filteredCardFactory(recipe);
+        const filteredCardDOM = filteredCard.getFilteredCardDOM();
+        filteredCardContainer.appendChild(filteredCardDOM);
+      });
+
+      // Afficher un message d'erreur si aucune recette ne correspond à la recherche
+      if (filteredRecipes.length === 0) {
+        errorMessage.style.display = "block";
+        filteredCardArray = [];
+      } else {
+        errorMessage.style.display = "none";
+      }
     });
-    if (searchTag.length > 0) {
-      // Cacher toutes les cartes non filtrées
-      recipesContainerCards.forEach((card) => {
-        if (!filteredRecipes.includes(card)) {
-          card.style.display = "none";
-        } else {
-          card.style.display = "block";
-        }
-      });
-      filteredCardContainer.style.display = "grid";
-    } else {
-      // Afficher toutes les cartes
-      recipesContainerCards.forEach((card) => {
-        card.style.display = "block";
-      });
-      filteredCardContainer.style.display = "none";
-    }
-    // Afficher un message d'erreur si aucune recette ne correspond aux tags
-    if (filteredRecipes.length === 0) {
-      errorMessage.style.display = "block";
-    } else {
-      errorMessage.style.display = "none";
-    }
-  });
+
+    recipesContainer.style.display = "none";
+    filteredCardContainer.style.display = "grid";
+  } else {
+    recipesContainer.style.display = "grid";
+    filteredCardContainer.style.display = "none";
+    errorMessage.style.display = "none";
+    filteredCardArray = [];
+  }
 }
 
 /*************************************************/
@@ -279,6 +287,7 @@ function displayIngredients(ingredientsList) {
         divTag.appendChild(crossTag);
         tag.appendChild(divTag);
         tagArray.push(pIngredientsText.toLowerCase());
+        searchByTagAlgo();
         console.log(tagArray);
       }
     });
@@ -365,6 +374,7 @@ function displayAppliance(applianceList) {
         divTag.appendChild(crossTag);
         tag.appendChild(divTag);
         tagArray.push(pApplianceText.toLowerCase());
+        searchByTagAlgo();
         console.log(tagArray);
       }
     });
@@ -455,6 +465,7 @@ function displayUstensiles() {
           divTag.appendChild(crossTag);
           tag.appendChild(divTag);
           tagArray.push(pUstensilText.toLowerCase());
+          searchByTagAlgo();
           console.log(tagArray);
         }
       });
@@ -482,8 +493,6 @@ function displayUstensiles() {
   });
 }
 
-// test recherche par tag
-
 function ustensilsSearch() {
   const divUstensiles = document.getElementById("suggestions-ustensiles");
   divUstensiles.style.display = "grid";
@@ -502,7 +511,7 @@ async function initSearch() {
   const { recipes } =
     await getRecipes(); /** Récupére les données des récipes avant recherche*/
   /** Apelle des fonctions de rercherche des données des récipes */
-  searchAlgo(recipes);
+  // searchAlgo(recipes);
   searchByTagAlgo(recipes);
 }
 
