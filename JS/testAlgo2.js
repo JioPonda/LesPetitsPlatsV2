@@ -108,11 +108,15 @@ function filteredCardFactory(data) {
   };
 }
 
-function factoryTagIngredients() {}
-
 /*************************************************/
 /*******  ALGORYTHME DE RECHERCHE V1 *************/
 /*************************************************/
+
+// Tableau contenant les card crée après une cherche
+let filteredCardArray = [];
+
+// Tableau contenant les tags crée
+let tagArray = [];
 
 function searchAlgo() {
   // Base
@@ -146,8 +150,9 @@ function searchAlgo() {
               ustensil.toLowerCase().includes(searchDish)
             )
           );
-          // faire la recherche par tag ici par le tableau tagArray
         });
+        filteredCardArray.push(filteredRecipes);
+        console.log(filteredCardArray);
         // Supprimer les anciennes cartes de la grille de cartes filtrées
         filteredCardContainer.innerHTML = "";
         // Créer de nouvelles cartes pour chaque recette filtrée
@@ -159,6 +164,7 @@ function searchAlgo() {
         // Afficher un message d'erreur si aucune recette ne correspond à la recherche
         if (filteredRecipes.length === 0) {
           errorMessage.style.display = "block";
+          filteredCardArray = [];
         } else {
           errorMessage.style.display = "none";
         }
@@ -166,6 +172,52 @@ function searchAlgo() {
     } else {
       recipesContainer.style.display = "grid";
       filteredCardContainer.style.display = "none";
+      errorMessage.style.display = "none";
+      filteredCardArray = [];
+    }
+  });
+}
+
+function searchByTagAlgo() {
+  // Base
+  const searchBar = document.querySelector("#searchbar");
+  const filteredCardContainer = document.querySelector(
+    ".filtered-card-container"
+  );
+  const errorMessage = document.querySelector("#error-search");
+
+  // Event listner
+  searchBar.addEventListener("keyup", function () {
+    const searchTag = tagArray.map((tag) => tag.toLowerCase().trim());
+    const recipesContainerCards = filteredCardArray.map((filteredCard) =>
+      filteredCard.getFilteredCardDOM()
+    );
+    const filteredRecipes = recipesContainerCards.filter((card) => {
+      const cardContent = card.textContent.toLowerCase().trim();
+      // Vérifier si la carte contient tous les éléments du tableau de tags
+      return searchTag.every((tag) => cardContent.includes(tag));
+    });
+    if (searchTag.length > 0) {
+      // Cacher toutes les cartes non filtrées
+      recipesContainerCards.forEach((card) => {
+        if (!filteredRecipes.includes(card)) {
+          card.style.display = "none";
+        } else {
+          card.style.display = "block";
+        }
+      });
+      filteredCardContainer.style.display = "grid";
+    } else {
+      // Afficher toutes les cartes
+      recipesContainerCards.forEach((card) => {
+        card.style.display = "block";
+      });
+      filteredCardContainer.style.display = "none";
+    }
+    // Afficher un message d'erreur si aucune recette ne correspond aux tags
+    if (filteredRecipes.length === 0) {
+      errorMessage.style.display = "block";
+    } else {
       errorMessage.style.display = "none";
     }
   });
@@ -193,8 +245,6 @@ function getIngredients() {
   });
 }
 
-let tagArray = [];
-
 function displayIngredients(ingredientsList) {
   const suggestionIngredients = document.getElementById(
     "suggestions-ingredient"
@@ -216,9 +266,6 @@ function displayIngredients(ingredientsList) {
     pIngredient.addEventListener("click", function () {
       const pIngredientsText = pIngredient.textContent;
       if (!tagArray.includes(pIngredientsText.toLowerCase())) {
-        tagArray.push(pIngredientsText.toLowerCase());
-        console.log(tagArray);
-
         const tag = document.getElementById("tag-liste");
         const divTag = document.createElement("div");
         divTag.setAttribute("class", "tag-ingredient");
@@ -231,6 +278,8 @@ function displayIngredients(ingredientsList) {
         divTag.appendChild(iTag);
         divTag.appendChild(crossTag);
         tag.appendChild(divTag);
+        tagArray.push(pIngredientsText.toLowerCase());
+        console.log(tagArray);
       }
     });
   });
@@ -433,6 +482,8 @@ function displayUstensiles() {
   });
 }
 
+// test recherche par tag
+
 function ustensilsSearch() {
   const divUstensiles = document.getElementById("suggestions-ustensiles");
   divUstensiles.style.display = "grid";
@@ -450,9 +501,9 @@ function ustensilsSearch() {
 async function initSearch() {
   const { recipes } =
     await getRecipes(); /** Récupére les données des récipes avant recherche*/
-  searchAlgo(
-    recipes
-  ); /** Apelle de la fonction de rercherche des données des récipes */
+  /** Apelle des fonctions de rercherche des données des récipes */
+  searchAlgo(recipes);
+  searchByTagAlgo(recipes);
 }
 
 initSearch();
