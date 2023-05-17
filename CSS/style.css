@@ -337,7 +337,7 @@ header input {
 
 .card-ingredient {
   font-size: 0.75em;
-  margin-top: -5px;
+  margin-top: -8px;
 }
 
 /* card infos right */
@@ -354,6 +354,7 @@ header input {
   justify-content: center;
   align-items: center;
 }
+
 .card-clock {
   padding-right: 0.5em;
   height: 1.563em;
@@ -366,26 +367,16 @@ header input {
 }
 
 .card-description {
-  /* height: 45%; */
   width: 10vw;
   margin-right: 12%;
-  font-family: "Roboto";
+  font-family: Roboto;
   font-weight: 400;
-  font-size: 0.75em;
-  -webkit-line-clamp: 4;
+  font-size: 0.85em;
+  -webkit-line-clamp: 5;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-/* A LAISSER POUR TEST LE NEWSEARCHSYSTEM.JS */
-/* .hide-card {
-  display: none;
-}
-
-.show-card {
-  display: block;
-} */
 
 /* FILTERED CARD ZONE */
 .filtered-card-container {
@@ -437,12 +428,12 @@ header input {
 
 .filtered-card-ingredient {
   font-size: 0.75em;
-  margin-top: -5px;
+  margin-top: -8px;
 }
 
 /* card infos right */
 
-.filtered-div-description {
+.filtered-description {
   display: flex;
   flex-direction: column;
   width: 50%;
@@ -454,6 +445,7 @@ header input {
   justify-content: center;
   align-items: center;
 }
+
 .filtered-card-clock {
   padding-right: 0.5em;
   height: 1.563em;
@@ -466,13 +458,12 @@ header input {
 }
 
 .filtered-card-description {
-  /* height: 45%; */
   width: 10vw;
   margin-right: 12%;
-  font-family: "Roboto";
+  font-family: Roboto;
   font-weight: 400;
-  font-size: 0.75em;
-  -webkit-line-clamp: 4;
+  font-size: 0.85em;
+  -webkit-line-clamp: 5;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -514,7 +505,7 @@ header input {
 
   .filtered-card-ingredient {
     font-size: 0.6em;
-    margin-top: -4px;
+    margin-top: -3px;
   }
 
   .filtered-card-clock {
