@@ -45,6 +45,12 @@ header input {
 
 /* NAVBAR */
 
+.fa-magnifying-glass {
+  font-size: 40px;
+  position: absolute;
+  margin: 160px 0 0 75vw;
+}
+
 #error-search {
   display: none;
   margin: 5px 0 0 -41vw;
@@ -474,13 +480,18 @@ header input {
     margin: 0px 0 0 4vw;
   }
 
+  #error-search {
+    display: none;
+    margin: 5px 0 0 -27vw;
+  }
+
   .card-title {
-    font-size: 0.8em;
+    font-size: 1em;
   }
 
   .card-ingredient {
-    font-size: 0.6em;
-    margin-top: -3px;
+    font-size: 0.7em;
+    margin-top: -7px;
   }
 
   .card-clock {
@@ -494,18 +505,19 @@ header input {
   }
 
   .card-description {
-    font-size: 0.65em;
-    margin-top: 30px;
+    font-size: 0.85em;
+    margin-top: 0px;
     margin-left: 5px;
+    -webkit-line-clamp: 7;
   }
 
   .filtered-card-title {
-    font-size: 0.8em;
+    font-size: 1em;
   }
 
   .filtered-card-ingredient {
-    font-size: 0.6em;
-    margin-top: -3px;
+    font-size: 0.7em;
+    margin-top: -7px;
   }
 
   .filtered-card-clock {
@@ -519,59 +531,145 @@ header input {
   }
 
   .filtered-card-description {
-    font-size: 0.65em;
-    margin-top: 30px;
+    font-size: 0.85em;
+    margin-top: 0px;
     margin-left: 5px;
+    -webkit-line-clamp: 7;
   }
 }
 
 @media screen and (max-width: 1024px) {
+  .fa-magnifying-glass {
+    font-size: 30px;
+    margin: 162px 0 0 74vw;
+  }
+
+  .search-zone {
+    margin: 0px 0 0 7vw;
+  }
+
+  #error-search {
+    margin: 5px 0 0 -2vw;
+  }
+
+  #tag-liste {
+    margin: 15px 0 0 11vw;
+  }
+
   #ingredient {
-    width: 15vw;
+    width: 20vw;
+  }
+
+  #pIngredient {
+    font-size: 1.15em;
   }
 
   #appareils {
-    width: 15vw;
+    width: 20vw;
+  }
+
+  #pAppareils {
+    font-size: 1.15em;
   }
 
   #ustensiles {
-    width: 15vw;
+    width: 20vw;
   }
 
   .chevron-ingredients {
-    margin: -55px 0 0 13vw;
+    margin: -55px 0 0 18vw;
   }
 
   .chevron-appareils {
-    margin: -55px 0 0 13vw;
+    margin: -55px 0 0 18vw;
   }
 
   .chevron-ustensiles {
-    margin: -55px 0 0 13vw;
+    margin: -55px 0 0 18vw;
+  }
+
+  .all-card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2vw;
+    margin: 50px 0 50px 4vw;
+  }
+
+  .div-card {
+    height: 400px;
+    width: 43vw;
+    display: flex;
+    flex-direction: column;
   }
 
   .card-title {
-    font-size: 0.75em;
+    font-size: 1.1em;
   }
 
   .card-ingredient {
-    font-size: 0.55em;
-    margin-top: -3px;
+    font-size: 0.85em;
+    margin-top: -8px;
   }
 
   .card-clock {
-    padding-right: 1em;
-    height: 0.8em;
-    width: 0.8em;
+    padding-right: 0.4em;
+    height: 1em;
+    width: 1em;
   }
 
   .card-time {
-    font-size: 13px;
+    font-size: 16px;
   }
 
   .card-description {
-    margin-top: 35px;
+    font-size: 1em;
+    margin-top: -1px;
     margin-left: 5px;
+    width: 19vw;
+    -webkit-line-clamp: 7;
+  }
+
+  /* FILTERED CARD ZONE */
+
+  .filtered-card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2vw;
+    margin: 50px 0 50px 4vw;
+  }
+
+  .filtered-card {
+    height: 400px;
+    width: 43vw;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filtered-card-title {
+    font-size: 1.1em;
+  }
+
+  .filtered-card-ingredient {
+    font-size: 0.85em;
+    margin-top: -8px;
+  }
+
+  .filtered-card-clock {
+    padding-right: 0.4em;
+    height: 1em;
+    width: 1em;
+  }
+
+  .filtered-card-time {
+    font-size: 16px;
+  }
+
+  .filtered-card-description {
+    font-size: 1em;
+    margin-top: -1px;
+    margin-left: 5px;
+    width: 19vw;
+    -webkit-line-clamp: 7;
   }
 }
 
@@ -606,6 +704,11 @@ header input {
   }
 
   /* NAVBAR */
+
+  .fa-magnifying-glass {
+    font-size: 40px;
+    margin: 233px 0 0 79vw;
+  }
 
   #error-search {
     margin: 10px 0 0 5vw;
@@ -763,18 +866,18 @@ header input {
   }
   /* CARD ZONE */
 
-  .container {
+  .all-card-container {
     display: grid;
     grid-template-columns: 1fr;
     gap: 5vw;
-    margin: 50px 0 50px 7vw;
+    margin: 50px 0 60px 5vw;
   }
 
   /* card skull*/
   .div-card {
     display: block;
     height: 700px;
-    width: 85vw;
+    width: 90vw;
     display: flex;
     flex-direction: column;
   }
@@ -829,12 +932,86 @@ header input {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  /* FILTERED CARD ZONE */
+
+  .filtered-card-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5vw;
+    margin: 50px 0 60px 5vw;
+  }
+
+  /* card skull*/
+  .filtered-card {
+    display: block;
+    height: 700px;
+    width: 90vw;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filtered-grey-zone {
+    border-radius: 15px 15px 0px 0px;
+  }
+
+  .filtered-card-infos {
+    border-radius: 0px 0px 15px 15px;
+  }
+
+  /* card infos left */
+
+  .filtered-card-title {
+    margin-left: 2vw;
+    font-size: 2em;
+  }
+
+  .filtered-span-ingredient {
+    margin: 0px 0 0 2vw;
+  }
+
+  .filtered-card-ingredient {
+    font-size: 1.125em;
+    margin-top: -10px;
+  }
+
+  /* card infos right */
+
+  .filtered-div-time {
+    margin-top: 10px;
+  }
+
+  .filtered-card-clock {
+    padding-right: 0.5em;
+    height: 1.8em;
+    width: 1.8em;
+  }
+
+  .filtered-card-time {
+    font-weight: 700;
+    font-size: 1.5em;
+  }
+
+  .filtered-card-description {
+    width: 30vw;
+    font-size: 1.5em;
+    margin: 15px 0 0 3vw;
+    -webkit-line-clamp: 7;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 
 @media screen and (max-width: 425px) {
   header input {
     /* placeholder */
     font-size: 1.5em;
+  }
+
+  .fa-magnifying-glass {
+    font-size: 30px;
+    margin: 241px 0 0 76vw;
   }
 
   #error-search {
@@ -894,12 +1071,12 @@ header input {
   }
 
   .card-title {
-    font-size: 1em;
+    font-size: 1.25em;
   }
 
   .card-ingredient {
-    font-size: 0.8em;
-    margin-top: -10px;
+    font-size: 0.9em;
+    margin-top: -15px;
   }
 
   .card-clock {
@@ -917,13 +1094,49 @@ header input {
   }
 
   .card-description {
-    width: 30vw;
+    width: 38vw;
     font-size: 1em;
-    margin: 10px 0 0 3vw;
-    -webkit-line-clamp: 7;
+    margin: 0px 0 0 3vw;
+    -webkit-line-clamp: 9;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* FILTERED CARD ZONE */
+
+  .filtered-card {
+    height: 500px;
+  }
+
+  .filtered-card-title {
+    font-size: 1em;
+  }
+
+  .filtered-card-ingredient {
+    font-size: 0.9em;
+    margin-top: -15px;
+  }
+
+  .filtered-card-clock {
+    padding-right: 0.5em;
+    height: 1.125em;
+    width: 1.125em;
+  }
+
+  .filtered-card-time {
+    font-size: 1em;
+  }
+
+  .filtered-div-time {
+    margin-top: 5px;
+  }
+
+  .filtered-card-description {
+    width: 38vw;
+    font-size: 1em;
+    margin: 0px 0 0 3vw;
+    -webkit-line-clamp: 9;
   }
 }
 
@@ -935,6 +1148,11 @@ header input {
   header h1 {
     font-size: 2.25em;
     align-items: center;
+  }
+
+  .fa-magnifying-glass {
+    font-size: 30px;
+    margin: 180px 0 0 77vw;
   }
 
   .card-title {

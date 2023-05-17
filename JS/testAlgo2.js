@@ -131,7 +131,7 @@ function searchAlgo() {
 
   // Event listner
   searchBar.addEventListener("keyup", function () {
-    const searchDish = searchBar.value.toLowerCase().trim();
+    const searchDish = searchBar.value.toLowerCase();
     if (searchDish.length >= 3) {
       recipesContainer.style.display = "none";
       filteredCardContainer.style.display = "grid";
@@ -186,7 +186,7 @@ function searchByTagAlgo() {
   );
   const errorMessage = document.querySelector("#error-search");
   const recipesContainer = document.querySelector(".all-card-container");
-  const searchTags = tagArray.map((tag) => tag.toLowerCase().trim());
+  const searchTags = tagArray.map((tag) => tag.toLowerCase());
 
   getRecipes().then((data) => {
     const recipesList = data.recipes;
