@@ -242,7 +242,7 @@ function removeTag(tagText) {
     const tagElement = tagIngredient[i].getElementsByTagName("p")[0];
     if (tagElement.textContent.toLowerCase() === tagText) {
       tag.removeChild(tagIngredient[i]);
-      tagArray.splice(i, 1); // Supprimer le tag du tableau tagArray
+      tagArray.splice(i, 1);
       break;
     }
   }
@@ -251,7 +251,7 @@ function removeTag(tagText) {
     const tagElement = tagAppareils[i].getElementsByTagName("p")[0];
     if (tagElement.textContent.toLowerCase() === tagText) {
       tag.removeChild(tagAppareils[i]);
-      tagArray.splice(i, 1); // Supprimer le tag du tableau tagArray
+      tagArray.splice(i, 1);
       break;
     }
   }
@@ -260,7 +260,7 @@ function removeTag(tagText) {
     const tagElement = tagUstensiles[i].getElementsByTagName("p")[0];
     if (tagElement.textContent.toLowerCase() === tagText) {
       tag.removeChild(tagUstensiles[i]);
-      tagArray.splice(i, 1); // Supprimer le tag du tableau tagArray
+      tagArray.splice(i, 1);
       break;
     }
   }
