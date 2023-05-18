@@ -181,42 +181,82 @@ function searchAlgo() {
 }
 
 function searchByTagAlgo() {
+  const searchBar = document.querySelector("#searchbar");
+  const searchDish = searchBar.value.toLowerCase();
   const filteredCardContainer = document.querySelector(
     ".filtered-card-container"
   );
   const errorMessage = document.querySelector("#error-search");
   const recipesContainer = document.querySelector(".all-card-container");
   const searchTags = tagArray.map((tag) => tag.toLowerCase());
+  if (searchDish.length === 0) {
+    getRecipes().then((data) => {
+      const recipesList = data.recipes;
+      const filteredRecipes = recipesList.filter((recipe) => {
+        return searchTags.every((tag) => {
+          return (
+            recipe.ingredients.some((ingredient) =>
+              ingredient.ingredient.toLowerCase().includes(tag)
+            ) ||
+            recipe.appliance.toLowerCase().includes(tag) ||
+            recipe.ustensils.some((ustensil) =>
+              ustensil.toLowerCase().includes(tag)
+            )
+          );
+        });
+      });
 
-  getRecipes().then((data) => {
-    const recipesList = data.recipes;
-    const filteredRecipes = recipesList.filter((recipe) => {
+      filteredCardContainer.innerHTML = "";
+      filteredRecipes.forEach((recipe) => {
+        const filteredCard = filteredCardFactory(recipe);
+        const filteredCardDOM = filteredCard.getFilteredCardDOM();
+        filteredCardContainer.appendChild(filteredCardDOM);
+      });
+
+      if (filteredRecipes.length === 0) {
+        errorMessage.style.display = "block";
+      } else {
+        errorMessage.style.display = "none";
+      }
+    });
+
+    if (searchTags.length >= 1) {
+      recipesContainer.style.display = "none";
+      filteredCardContainer.style.display = "grid";
+    } else {
+      recipesContainer.style.display = "grid";
+      filteredCardContainer.style.display = "none";
+      errorMessage.style.display = "none";
+    }
+  }
+  if (searchDish.length >= 3) {
+    filteredCardArray = filteredCardArray.filter((card) => {
       return searchTags.every((tag) => {
         return (
-          recipe.ingredients.some((ingredient) =>
+          card.name.toLowerCase().includes(tag) ||
+          card.ingredients.some((ingredient) =>
             ingredient.ingredient.toLowerCase().includes(tag)
           ) ||
-          recipe.appliance.toLowerCase().includes(tag) ||
-          recipe.ustensils.some((ustensil) =>
+          card.appliance.toLowerCase().includes(tag) ||
+          card.ustensils.some((ustensil) =>
             ustensil.toLowerCase().includes(tag)
           )
         );
       });
     });
-
     filteredCardContainer.innerHTML = "";
-    filteredRecipes.forEach((recipe) => {
+    filteredCardArray.forEach((recipe) => {
       const filteredCard = filteredCardFactory(recipe);
       const filteredCardDOM = filteredCard.getFilteredCardDOM();
       filteredCardContainer.appendChild(filteredCardDOM);
     });
 
-    if (filteredRecipes.length === 0) {
+    if (filteredCardArray.length === 0) {
       errorMessage.style.display = "block";
     } else {
       errorMessage.style.display = "none";
     }
-  });
+  }
 
   if (searchTags.length >= 1) {
     recipesContainer.style.display = "none";
@@ -243,7 +283,6 @@ function removeTag(tagText) {
     if (tagElement.textContent.toLowerCase() === tagText) {
       tag.removeChild(tagIngredient[i]);
       tagArray.splice(i, 1);
-      break;
     }
   }
 
@@ -252,7 +291,6 @@ function removeTag(tagText) {
     if (tagElement.textContent.toLowerCase() === tagText) {
       tag.removeChild(tagAppareils[i]);
       tagArray.splice(i, 1);
-      break;
     }
   }
 
@@ -261,7 +299,6 @@ function removeTag(tagText) {
     if (tagElement.textContent.toLowerCase() === tagText) {
       tag.removeChild(tagUstensiles[i]);
       tagArray.splice(i, 1);
-      break;
     }
   }
 }
@@ -590,41 +627,3 @@ function hideUstensilesList() {
   chevronUstensiles.style.transform = "rotate(0)";
   divUstensiles.innerHTML = "";
 }
-
-/** Suppression des tags */
-function hideTag() {
-  let crossedIngredient = document.querySelectorAll("#crossed-ingredient");
-  let tagIngredientListe = [];
-  let crossedAppareils = document.querySelectorAll("#crossed-appareils");
-  let tagAppareilsListe = [];
-  let crossedUstensiles = document.querySelectorAll("#crossed-ustensiles");
-  let tagUstensilesListe = [];
-
-  for (let crossI = 0; crossI < crossedIngredient.length; crossI++) {
-    const tagIngredient = document.querySelectorAll(".tag-ingredient");
-    for (let tI = 0; tI < tagIngredient.length; tI++)
-      crossedIngredient[crossI].addEventListener("click", function () {
-        tagIngredient[tI].remove();
-        tagIngredientListe.push(tagIngredient[tI].textContent);
-      });
-  }
-
-  for (let crossA = 0; crossA < crossedAppareils.length; crossA++) {
-    const tagAppareils = document.querySelectorAll(".tag-appareil");
-    for (let tA = 0; tA < tagAppareils.length; tA++)
-      crossedAppareils[crossA].addEventListener("click", function () {
-        tagAppareils[tA].remove();
-        tagAppareilsListe.push(tagAppareils[tA].textContent);
-      });
-  }
-
-  for (let crossU = 0; crossU < crossedUstensiles.length; crossU++) {
-    const tagUstensiles = document.querySelectorAll(".tag-ustensile");
-    for (let tU = 0; tU < tagUstensiles.length; tU++)
-      crossedUstensiles[crossU].addEventListener("click", function () {
-        tagUstensiles[tU].remove();
-        tagUstensilesListe.push(tagUstensiles[tU].textContent);
-      });
-  }
-}
-/*************************************************/
