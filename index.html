@@ -43,6 +43,7 @@
         type="text"
         name="search"
         placeholder="Rechercher une recette"
+        onclick="hideIngredientList (), hideUstensilesList (),hideAppareilsList ()"
       />
       <p id="error-search">
         « Aucune recette ne correspond à votre critère… vous pouvez chercher «
@@ -60,7 +61,7 @@
               type="text"
               name="ingredients"
               placeholder="Ingredient"
-              onfocus="ingredientSearch ()"
+              onclick="ingredientSearch (),hideAppareilsList (),hideUstensilesList ()"
             />
             <!-- onfocusout="hideIngredientList ()" -->
             <i
@@ -76,7 +77,7 @@
               type="text"
               name="appareils"
               placeholder="Appareils"
-              onfocus="applianceSearch ()"
+              onclick="applianceSearch (),hideIngredientList (), hideUstensilesList ()"
             />
             <i
               class="fa-solid fa-chevron-up chevron-appareils"
@@ -90,7 +91,7 @@
               type="text"
               name="ustensiles"
               placeholder="Ustensiles"
-              onfocus="ustensilsSearch ()"
+              onclick="ustensilsSearch (),hideIngredientList (),hideAppareilsList ()"
             />
             <i
               class="fa-solid fa-chevron-up chevron-ustensiles"
@@ -105,6 +106,6 @@
       <section class="filtered-card-container"></section>
     </main>
     <script src="JS/page_element.js"></script>
-    <script src="JS/testAlgo2.js"></script>
+    <script src="JS/testAlgo.js"></script>
   </body>
 </html>
