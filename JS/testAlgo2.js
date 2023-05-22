@@ -130,38 +130,40 @@ const errorMessage = document.querySelector("#error-search");
 
 /**** Recherche dans la barre de recherche principal ****/
 function searchAlgo() {
-  let filteredCardArray = [];
   const searchDish = searchBar.value.toLowerCase();
   recipesContainer.style.display = "none";
   filteredCardContainer.style.display = "grid";
   getRecipes().then((data) => {
     const recipesList = data.recipes;
-    const filteredRecipes = recipesList.filter((recipe) => {
-      // Rechercher le terme dans le nom de la recette, le nom de l'ingrédient,
-      // le nom de l'appareil et le nom de l'ustensile
-      return (
-        recipe.name.toLowerCase().includes(searchDish) ||
-        recipe.ingredients.some((ingredient) =>
+    const filteredRecipes = [];
+    for (let i = 0; i < recipesList.length; i++) {
+      const recipe = recipesList[i];
+      const { name, ingredients, appliance, ustensils } = recipe;
+      if (
+        name.toLowerCase().includes(searchDish) ||
+        ingredients.some((ingredient) =>
           ingredient.ingredient.toLowerCase().includes(searchDish)
         ) ||
-        recipe.appliance.toLowerCase().includes(searchDish) ||
-        recipe.ustensils.some((ustensil) =>
+        appliance.toLowerCase().includes(searchDish) ||
+        ustensils.some((ustensil) =>
           ustensil.toLowerCase().includes(searchDish)
         )
-      );
-    });
+      ) {
+        filteredRecipes.push(recipe);
+      }
+    }
     filteredCardArray = filteredRecipes.map((recipe) =>
       filteredCardFactory(recipe)
     );
-    // Supprimer les anciennes cartes de la grille de cartes filtrées
+    // Suppression des anciennes cartes de la grille de cartes filtrées
     filteredCardContainer.innerHTML = "";
-    // Créer de nouvelles cartes pour chaque recette filtrée
+    // Création de nouvelles cartes pour chaque recette filtrée
     filteredRecipes.forEach((recipe) => {
       const filteredCard = filteredCardFactory(recipe);
       const filteredCardDOM = filteredCard.getFilteredCardDOM();
       filteredCardContainer.appendChild(filteredCardDOM);
     });
-    // Afficher un message d'erreur si aucune recette ne correspond à la recherche
+    // Affichage du message d'erreur si aucune recette ne correspond à la recherche
     if (filteredRecipes.length === 0) {
       errorMessage.style.display = "block";
       filteredCardArray = [];
@@ -184,19 +186,24 @@ function searchByTagAlgo() {
   if (searchDish.length === 0) {
     getRecipes().then((data) => {
       const recipesList = data.recipes;
-      const filteredRecipes = recipesList.filter((recipe) => {
-        return searchTags.every((tag) => {
-          return (
-            recipe.ingredients.some((ingredient) =>
-              ingredient.ingredient.toLowerCase().includes(tag)
-            ) ||
-            recipe.appliance.toLowerCase().includes(tag) ||
-            recipe.ustensils.some((ustensil) =>
-              ustensil.toLowerCase().includes(tag)
-            )
-          );
-        });
-      });
+      const filteredRecipes = [];
+      for (let i = 0; i < recipesList.length; i++) {
+        const recipe = recipesList[i];
+        const { ingredients, appliance, ustensils } = recipe;
+        if (
+          searchTags.every((tag) => {
+            return (
+              ingredients.some((ingredient) =>
+                ingredient.ingredient.toLowerCase().includes(tag)
+              ) ||
+              appliance.toLowerCase().includes(tag) ||
+              ustensils.some((ustensil) => ustensil.toLowerCase().includes(tag))
+            );
+          })
+        ) {
+          filteredRecipes.push(recipe);
+        }
+      }
 
       filteredCardContainer.innerHTML = "";
       filteredRecipes.forEach((recipe) => {
@@ -263,7 +270,6 @@ function searchByTagAlgo() {
   if (searchTags.length < 1) {
     filteredCardContainer.innerHTML = "";
     searchAlgo();
-    console.log("ici");
   }
 }
 
@@ -278,30 +284,41 @@ function updateFilteredResults() {
 
   getRecipes().then((data) => {
     const recipesList = data.recipes;
-    let filteredRecipes = recipesList;
+    let filteredRecipes = [];
 
     if (tagArray.length > 0) {
       // Filtrer les recettes en fonction des tags restants
-      filteredRecipes = recipesList.filter((recipe) => {
-        return tagArray.every((tag) => {
-          return (
-            recipe.ingredients.some((ingredient) =>
-              ingredient.ingredient.toLowerCase().includes(tag)
-            ) ||
-            recipe.appliance.toLowerCase().includes(tag) ||
-            recipe.ustensils.some((ustensil) =>
-              ustensil.toLowerCase().includes(tag)
-            )
-          );
-        });
-      });
+      for (let i = 0; i < recipesList.length; i++) {
+        const recipe = recipesList[i];
+        const { ingredients, appliance, ustensils } = recipe;
+        if (
+          tagArray.every((tag) => {
+            return (
+              ingredients.some((ingredient) =>
+                ingredient.ingredient.toLowerCase().includes(tag)
+              ) ||
+              appliance.toLowerCase().includes(tag) ||
+              ustensils.some((ustensil) => ustensil.toLowerCase().includes(tag))
+            );
+          })
+        ) {
+          filteredRecipes.push(recipe);
+        }
+      }
+    } else {
+      filteredRecipes = recipesList;
     }
 
     if (searchDish.length >= 3) {
       // Filtrer les recettes en fonction du terme de recherche principal
-      filteredRecipes = filteredRecipes.filter((recipe) => {
-        return recipe.name.toLowerCase().includes(searchDish);
-      });
+      const searchResults = [];
+      for (let i = 0; i < filteredRecipes.length; i++) {
+        const recipe = filteredRecipes[i];
+        if (recipe.name.toLowerCase().includes(searchDish)) {
+          searchResults.push(recipe);
+        }
+      }
+      filteredRecipes = searchResults;
     }
 
     filteredCardArray = filteredRecipes.map((recipe) =>
@@ -310,7 +327,7 @@ function updateFilteredResults() {
 
     // Mise à jour de la liste des cartes filtrées
     filteredCardContainer.innerHTML = "";
-    filteredRecipes.forEach((recipe) => {
+    filteredCardArray.forEach((recipe) => {
       const filteredCard = filteredCardFactory(recipe);
       const filteredCardDOM = filteredCard.getFilteredCardDOM();
       filteredCardContainer.appendChild(filteredCardDOM);
@@ -351,27 +368,49 @@ function removeTag(tagText) {
   const tagAppareils = tag.getElementsByClassName("tag-appareil");
   const tagUstensiles = tag.getElementsByClassName("tag-ustensile");
 
+  let removed = false; // Variable pour vérifier si un tag a été supprimé
+
   for (let i = 0; i < tagIngredient.length; i++) {
     const tagElement = tagIngredient[i].getElementsByTagName("p")[0];
-    if (tagElement.textContent.toLowerCase() === tagText) {
+    if (
+      tagElement.textContent.toLowerCase() === tagText &&
+      !tagIngredient[i].removed
+    ) {
       tag.removeChild(tagIngredient[i]);
       tagArray = tagArray.filter((tag) => tag !== tagText);
+      removed = true;
+      break; // Sortie de la boucle après la suppression du tag
     }
   }
 
-  for (let i = 0; i < tagAppareils.length; i++) {
-    const tagElement = tagAppareils[i].getElementsByTagName("p")[0];
-    if (tagElement.textContent.toLowerCase() === tagText) {
-      tag.removeChild(tagAppareils[i]);
-      tagArray = tagArray.filter((tag) => tag !== tagText);
+  if (!removed) {
+    // Si le tag n'a pas été supprimé des ingrédients, vérifier les appareils
+    for (let i = 0; i < tagAppareils.length; i++) {
+      const tagElement = tagAppareils[i].getElementsByTagName("p")[0];
+      if (
+        tagElement.textContent.toLowerCase() === tagText &&
+        !tagAppareils[i].removed
+      ) {
+        tag.removeChild(tagAppareils[i]);
+        tagArray = tagArray.filter((tag) => tag !== tagText);
+        removed = true;
+        break;
+      }
     }
   }
 
-  for (let i = 0; i < tagUstensiles.length; i++) {
-    const tagElement = tagUstensiles[i].getElementsByTagName("p")[0];
-    if (tagElement.textContent.toLowerCase() === tagText) {
-      tag.removeChild(tagUstensiles[i]);
-      tagArray = tagArray.filter((tag) => tag !== tagText);
+  if (!removed) {
+    // Si le tag n'a pas été supprimé des ingrédients et des appareils, vérifier les ustensiles
+    for (let i = 0; i < tagUstensiles.length; i++) {
+      const tagElement = tagUstensiles[i].getElementsByTagName("p")[0];
+      if (
+        tagElement.textContent.toLowerCase() === tagText &&
+        !tagUstensiles[i].removed
+      ) {
+        tag.removeChild(tagUstensiles[i]);
+        tagArray = tagArray.filter((tag) => tag !== tagText);
+        break;
+      }
     }
   }
 
@@ -383,8 +422,9 @@ function removeTag(tagText) {
     searchAlgo();
   }
 
-  // Mise à jour des résultats de recherche après la suppression d'un tag
+  // Mettre à jour les résultats de recherche après la suppression d'un tag
   updateFilteredResults();
+  searchByTagAlgo();
 }
 
 /*************************************************/
@@ -410,50 +450,75 @@ function getIngredients() {
 }
 
 function displayIngredients(ingredientsList) {
-  const searchBarIngredient = document.getElementById("ingredient");
+  const searchBar = document.querySelector("#searchbar");
+  const searchDish = searchBar.value.toLowerCase();
   const suggestionIngredients = document.getElementById(
     "suggestions-ingredient"
   );
   suggestionIngredients.innerHTML = "";
-
+  const searchBarIngredient = document.getElementById("ingredient");
   let searchIngredient = searchBarIngredient.value.toLowerCase();
 
-  if (searchIngredient === "") {
-    matchingIngredients = ingredientsList;
-  } else {
-    matchingIngredients = ingredientsList.filter((ingredient) => {
-      return ingredient.includes(searchIngredient);
-    });
+  // Création d'une nouvelle liste d'ingrédients correspondant à la recherche
+  let matchingIngredients = [];
+
+  for (const ingredient of ingredientsList) {
+    if (ingredient.includes(searchIngredient)) {
+      matchingIngredients.push(ingredient);
+    }
   }
 
-  matchingIngredients.forEach((ingredient) => {
+  for (const ingredient of matchingIngredients) {
     const pIngredient = document.createElement("p");
     pIngredient.textContent = ingredient;
     pIngredient.setAttribute("id", "pIngredient");
     suggestionIngredients.appendChild(pIngredient);
-    // Reste du code pour ajouter les tags et les événements click
-  });
+    pIngredient.addEventListener("click", function () {
+      const pIngredientsText = pIngredient.textContent;
+      if (!tagArray.includes(pIngredientsText.toLowerCase())) {
+        const tag = document.getElementById("tag-liste");
+        const divTag = document.createElement("div");
+        divTag.setAttribute("class", "tag-ingredient");
+        const iTag = document.createElement("p");
+        iTag.setAttribute("class", "text-ingredient-tag");
+        iTag.textContent = pIngredientsText;
+        const crossTag = document.createElement("i");
+        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        crossTag.addEventListener("click", function () {
+          removeTag(pIngredientsText.toLowerCase());
+        });
+        divTag.appendChild(iTag);
+        divTag.appendChild(crossTag);
+        tag.appendChild(divTag);
+        tagArray.push(pIngredientsText.toLowerCase());
+        searchByTagAlgo();
+        console.log(tagArray);
+      }
+    });
+  }
 
   const pIngredients = suggestionIngredients.querySelectorAll("p");
 
   searchBarIngredient.addEventListener("keyup", function () {
     let searchIngredient = searchBarIngredient.value.toLowerCase();
 
-    if (searchIngredient === "") {
-      displayIngredients(ingredientsList);
-    } else {
-      matchingIngredients = ingredientsList.filter((ingredient) => {
-        return ingredient.includes(searchIngredient);
-      });
+    // Recréation de la liste d'ingrédients correspondant à la recherche
+    let matchingIngredients = [];
 
-      pIngredients.forEach((p) => {
-        if (matchingIngredients.includes(p.textContent)) {
-          p.style.display = "block";
-        } else {
-          p.style.display = "none";
-        }
-      });
+    for (const ingredient of ingredientsList) {
+      if (ingredient.includes(searchIngredient)) {
+        matchingIngredients.push(ingredient);
+      }
     }
+
+    // Affichage uniquement des éléments de la liste correspondant à la recherche
+    pIngredients.forEach((p) => {
+      if (matchingIngredients.includes(p.textContent)) {
+        p.style.display = "block";
+      } else {
+        p.style.display = "none";
+      }
+    });
   });
 }
 
@@ -486,21 +551,21 @@ function getAppliance() {
 }
 
 function displayAppliance(applianceList) {
-  const searchBarAppareils = document.getElementById("appareils");
   const suggestionAppareils = document.getElementById("suggestions-appareils");
   suggestionAppareils.innerHTML = "";
-
+  const searchBarAppareils = document.getElementById("appareils");
   let searchAppliance = searchBarAppareils.value.toLowerCase();
 
-  if (searchAppliance === "") {
-    matchingAppareils = applianceList;
-  } else {
-    matchingAppareils = applianceList.filter((appliance) => {
-      return appliance.includes(searchAppliance);
-    });
+  // Création d'une nouvelle liste d'appareils correspondant à la recherche
+  let matchingAppareils = [];
+
+  for (const appliance of applianceList) {
+    if (appliance.includes(searchAppliance)) {
+      matchingAppareils.push(appliance);
+    }
   }
 
-  matchingAppareils.forEach((appliance) => {
+  for (const appliance of matchingAppareils) {
     const pAppareils = document.createElement("p");
     pAppareils.textContent = appliance;
     pAppareils.setAttribute("id", "pAppareils");
@@ -528,28 +593,30 @@ function displayAppliance(applianceList) {
         console.log(tagArray);
       }
     });
-  });
+  }
 
   const pAppareils = suggestionAppareils.querySelectorAll("p");
 
   searchBarAppareils.addEventListener("keyup", function () {
     let searchAppliance = searchBarAppareils.value.toLowerCase();
 
-    if (searchAppliance === "") {
-      displayAppliance(applianceList);
-    } else {
-      matchingAppareils = applianceList.filter((appliance) => {
-        return appliance.includes(searchAppliance);
-      });
+    // Recréation la liste d'appareils correspondant à la recherche
+    let matchingAppareils = [];
 
-      pAppareils.forEach((p) => {
-        if (matchingAppareils.includes(p.textContent)) {
-          p.style.display = "block";
-        } else {
-          p.style.display = "none";
-        }
-      });
+    for (const appliance of applianceList) {
+      if (appliance.includes(searchAppliance)) {
+        matchingAppareils.push(appliance);
+      }
     }
+
+    // Affichage uniquement des éléments de la liste correspondant à la recherche
+    pAppareils.forEach((p) => {
+      if (matchingAppareils.includes(p.textContent)) {
+        p.style.display = "block";
+      } else {
+        p.style.display = "none";
+      }
+    });
   });
 }
 
@@ -588,21 +655,19 @@ function displayUstensiles() {
   const suggestionUstensils = document.getElementById("suggestions-ustensiles");
   suggestionUstensils.innerHTML = "";
   const searchBarUstensiles = document.getElementById("ustensiles");
-
   let searchUstensil = searchBarUstensiles.value.toLowerCase();
 
   getUstensils().then((ustensilsList) => {
-    let matchingUstensils;
+    // Création d'une nouvelle liste d'ustensiles correspondant à la recherche
+    let matchingUstensils = [];
 
-    if (searchUstensil === "") {
-      matchingUstensils = ustensilsList;
-    } else {
-      matchingUstensils = ustensilsList.filter((ustensil) => {
-        return ustensil.includes(searchUstensil);
-      });
+    for (const ustensil of ustensilsList) {
+      if (ustensil.includes(searchUstensil)) {
+        matchingUstensils.push(ustensil);
+      }
     }
 
-    matchingUstensils.forEach((ustensil) => {
+    for (const ustensil of matchingUstensils) {
       const pUstensils = document.createElement("p");
       pUstensils.textContent = ustensil;
       pUstensils.setAttribute("id", "pUstensils");
@@ -630,28 +695,30 @@ function displayUstensiles() {
           console.log(tagArray);
         }
       });
-    });
+    }
 
     const pUstensils = suggestionUstensils.querySelectorAll("p");
 
     searchBarUstensiles.addEventListener("keyup", function () {
       let searchUstensil = searchBarUstensiles.value.toLowerCase();
 
-      if (searchUstensil === "") {
-        displayUstensiles();
-      } else {
-        matchingUstensils = ustensilsList.filter((ustensil) => {
-          return ustensil.includes(searchUstensil);
-        });
+      // Recréation la liste d'ustensils correspondant à la recherche
+      let matchingUstensils = [];
 
-        pUstensils.forEach((p) => {
-          if (matchingUstensils.includes(p.textContent)) {
-            p.style.display = "block";
-          } else {
-            p.style.display = "none";
-          }
-        });
+      for (const ustensil of ustensilsList) {
+        if (ustensil.includes(searchUstensil)) {
+          matchingUstensils.push(ustensil);
+        }
       }
+
+      // Affichage uniquement des éléments de la liste correspondant à la recherche
+      pUstensils.forEach((p) => {
+        if (matchingUstensils.includes(p.textContent)) {
+          p.style.display = "block";
+        } else {
+          p.style.display = "none";
+        }
+      });
     });
   });
 }

@@ -130,7 +130,6 @@ const errorMessage = document.querySelector("#error-search");
 
 /**** Recherche dans la barre de recherche principal ****/
 function searchAlgo() {
-  let filteredCardArray = [];
   const searchDish = searchBar.value.toLowerCase();
   recipesContainer.style.display = "none";
   filteredCardContainer.style.display = "grid";
@@ -263,7 +262,6 @@ function searchByTagAlgo() {
   if (searchTags.length < 1) {
     filteredCardContainer.innerHTML = "";
     searchAlgo();
-    console.log("ici");
   }
 }
 
@@ -310,7 +308,7 @@ function updateFilteredResults() {
 
     // Mise à jour de la liste des cartes filtrées
     filteredCardContainer.innerHTML = "";
-    filteredRecipes.forEach((recipe) => {
+    filteredCardArray.forEach((recipe) => {
       const filteredCard = filteredCardFactory(recipe);
       const filteredCardDOM = filteredCard.getFilteredCardDOM();
       filteredCardContainer.appendChild(filteredCardDOM);
@@ -351,27 +349,49 @@ function removeTag(tagText) {
   const tagAppareils = tag.getElementsByClassName("tag-appareil");
   const tagUstensiles = tag.getElementsByClassName("tag-ustensile");
 
+  let removed = false; // Variable pour vérifier si un tag a été supprimé
+
   for (let i = 0; i < tagIngredient.length; i++) {
     const tagElement = tagIngredient[i].getElementsByTagName("p")[0];
-    if (tagElement.textContent.toLowerCase() === tagText) {
+    if (
+      tagElement.textContent.toLowerCase() === tagText &&
+      !tagIngredient[i].removed
+    ) {
       tag.removeChild(tagIngredient[i]);
       tagArray = tagArray.filter((tag) => tag !== tagText);
+      removed = true;
+      break; // Sortir de la boucle après la suppression du tag
     }
   }
 
-  for (let i = 0; i < tagAppareils.length; i++) {
-    const tagElement = tagAppareils[i].getElementsByTagName("p")[0];
-    if (tagElement.textContent.toLowerCase() === tagText) {
-      tag.removeChild(tagAppareils[i]);
-      tagArray = tagArray.filter((tag) => tag !== tagText);
+  if (!removed) {
+    // Si le tag n'a pas été supprimé des ingrédients, vérifier les appareils
+    for (let i = 0; i < tagAppareils.length; i++) {
+      const tagElement = tagAppareils[i].getElementsByTagName("p")[0];
+      if (
+        tagElement.textContent.toLowerCase() === tagText &&
+        !tagAppareils[i].removed
+      ) {
+        tag.removeChild(tagAppareils[i]);
+        tagArray = tagArray.filter((tag) => tag !== tagText);
+        removed = true;
+        break;
+      }
     }
   }
 
-  for (let i = 0; i < tagUstensiles.length; i++) {
-    const tagElement = tagUstensiles[i].getElementsByTagName("p")[0];
-    if (tagElement.textContent.toLowerCase() === tagText) {
-      tag.removeChild(tagUstensiles[i]);
-      tagArray = tagArray.filter((tag) => tag !== tagText);
+  if (!removed) {
+    // Si le tag n'a pas été supprimé des ingrédients et des appareils, vérifier les ustensiles
+    for (let i = 0; i < tagUstensiles.length; i++) {
+      const tagElement = tagUstensiles[i].getElementsByTagName("p")[0];
+      if (
+        tagElement.textContent.toLowerCase() === tagText &&
+        !tagUstensiles[i].removed
+      ) {
+        tag.removeChild(tagUstensiles[i]);
+        tagArray = tagArray.filter((tag) => tag !== tagText);
+        break;
+      }
     }
   }
 
@@ -383,8 +403,9 @@ function removeTag(tagText) {
     searchAlgo();
   }
 
-  // Mise à jour des résultats de recherche après la suppression d'un tag
+  // Mettre à jour les résultats de recherche après la suppression d'un tag
   updateFilteredResults();
+  searchByTagAlgo();
 }
 
 /*************************************************/
