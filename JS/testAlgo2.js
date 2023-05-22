@@ -342,7 +342,25 @@ function updateFilteredResults() {
 }
 
 /**** Event listner pour la barre de recherche principale ****/
-searchBar.addEventListener("keyup", function () {
+
+// Fonction de débouncing pour rendre la recherche plus fluide visuelement
+function debounce(func, delay) {
+  let timerId;
+
+  return function () {
+    const context = this;
+    const args = arguments;
+    // Réinitialise le timer à chaque appel de la fonction
+    clearTimeout(timerId);
+    timerId = setTimeout(function () {
+      func.apply(context, args);
+    }, delay);
+  };
+}
+
+const searchDelay = 350; // Temps de temporisation en ms
+
+const debouncedSearchBar = debounce(function () {
   const searchDish = searchBar.value.toLowerCase();
   if (searchDish.length >= 3) {
     filteredCardContainer.innerHTML = "";
@@ -354,7 +372,9 @@ searchBar.addEventListener("keyup", function () {
     errorMessage.style.display = "none";
     filteredCardArray = [];
   }
-});
+}, searchDelay);
+
+searchBar.addEventListener("keyup", debouncedSearchBar);
 
 /*************************************************/
 /************** SUPRESSION DES TAGS  *************/
@@ -492,7 +512,6 @@ function displayIngredients(ingredientsList) {
         tag.appendChild(divTag);
         tagArray.push(pIngredientsText.toLowerCase());
         searchByTagAlgo();
-        console.log(tagArray);
       }
     });
   }
@@ -590,7 +609,6 @@ function displayAppliance(applianceList) {
         tag.appendChild(divTag);
         tagArray.push(pApplianceText.toLowerCase());
         searchByTagAlgo();
-        console.log(tagArray);
       }
     });
   }
@@ -643,7 +661,6 @@ function getUstensils() {
         ustensilsArray.push(ustensil);
       });
     });
-    // console.log(ustensilsArray);
     const ustensilsList = ustensilsArray.filter(
       (x, i) => ustensilsArray.indexOf(x) === i
     );
@@ -692,7 +709,6 @@ function displayUstensiles() {
           tag.appendChild(divTag);
           tagArray.push(pUstensilText.toLowerCase());
           searchByTagAlgo();
-          console.log(tagArray);
         }
       });
     }
