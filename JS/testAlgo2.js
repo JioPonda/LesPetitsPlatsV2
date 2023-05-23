@@ -130,7 +130,7 @@ const errorMessage = document.querySelector("#error-search");
 
 /**** Recherche dans la barre de recherche principal ****/
 function searchAlgo() {
-  const searchDish = searchBar.value.toLowerCase();
+  const searchDish = searchBar.value.toLowerCase().trim();
   recipesContainer.style.display = "none";
   filteredCardContainer.style.display = "grid";
   getRecipes().then((data) => {
@@ -175,7 +175,7 @@ function searchAlgo() {
 
 /**** Recherche par Tag ****/
 function searchByTagAlgo() {
-  const searchDish = searchBar.value.toLowerCase();
+  const searchDish = searchBar.value.toLowerCase().trim();
   const filteredCardContainer = document.querySelector(
     ".filtered-card-container"
   );
@@ -479,16 +479,24 @@ function displayIngredients(ingredientsList) {
   const searchBarIngredient = document.getElementById("ingredient");
   let searchIngredient = searchBarIngredient.value.toLowerCase();
 
-  // Création d'une nouvelle liste d'ingrédients correspondant à la recherche
-  let matchingIngredients = [];
+  // Obtenir la liste des ingrédients présents dans les recettes filtrées
+  let filteredIngredients = [];
+  filteredCardArray.forEach((recipe) => {
+    recipe.ingredients.forEach((ingredient) => {
+      const ingredientText = ingredient.ingredient.toLowerCase();
+      if (!filteredIngredients.includes(ingredientText)) {
+        filteredIngredients.push(ingredientText);
+      }
+    });
+  });
+  console.log(filteredIngredients);
 
-  for (const ingredient of ingredientsList) {
-    if (ingredient.includes(searchIngredient)) {
-      matchingIngredients.push(ingredient);
-    }
-  }
+  // Créer une nouvelle liste d'ingrédients correspondant à la recherche
+  let matchingIngredients = ingredientsList.filter((ingredient) => {
+    return ingredient.includes(searchIngredient);
+  });
 
-  for (const ingredient of matchingIngredients) {
+  matchingIngredients.forEach((ingredient) => {
     const pIngredient = document.createElement("p");
     pIngredient.textContent = ingredient;
     pIngredient.setAttribute("id", "pIngredient");
@@ -514,25 +522,48 @@ function displayIngredients(ingredientsList) {
         searchByTagAlgo();
       }
     });
-  }
+  });
 
   const pIngredients = suggestionIngredients.querySelectorAll("p");
 
-  searchBarIngredient.addEventListener("keyup", function () {
-    let searchIngredient = searchBarIngredient.value.toLowerCase();
+  // Filtrer les ingrédients en fonction des recettes filtrées et de la recherche d'ingrédients
+  pIngredients.forEach((p) => {
+    const ingredientText = p.textContent.toLowerCase();
+    const isIngredientInFilteredRecipes =
+      filteredIngredients.includes(ingredientText);
+    const isIngredientMatchingSearch =
+      matchingIngredients.includes(ingredientText);
 
-    // Recréation de la liste d'ingrédients correspondant à la recherche
-    let matchingIngredients = [];
-
-    for (const ingredient of ingredientsList) {
-      if (ingredient.includes(searchIngredient)) {
-        matchingIngredients.push(ingredient);
-      }
+    if (
+      searchDish === "" ||
+      (isIngredientInFilteredRecipes && isIngredientMatchingSearch)
+    ) {
+      p.style.display = "block";
+    } else {
+      p.style.display = "none";
     }
+  });
 
-    // Affichage uniquement des éléments de la liste correspondant à la recherche
+  searchBarIngredient.addEventListener("keyup", function () {
+    searchIngredient = searchBarIngredient.value.toLowerCase();
+
+    // Recréer la liste d'ingrédients correspondant à la recherche
+    matchingIngredients = ingredientsList.filter((ingredient) => {
+      return ingredient.includes(searchIngredient);
+    });
+
+    // Filtrer les ingrédients en fonction des recettes filtrées et de la nouvelle recherche d'ingrédients
     pIngredients.forEach((p) => {
-      if (matchingIngredients.includes(p.textContent)) {
+      const ingredientText = p.textContent.toLowerCase();
+      const isIngredientInFilteredRecipes =
+        filteredIngredients.includes(ingredientText);
+      const isIngredientMatchingSearch =
+        matchingIngredients.includes(ingredientText);
+
+      if (
+        searchDish === "" ||
+        (isIngredientInFilteredRecipes && isIngredientMatchingSearch)
+      ) {
         p.style.display = "block";
       } else {
         p.style.display = "none";
@@ -570,21 +601,29 @@ function getAppliance() {
 }
 
 function displayAppliance(applianceList) {
+  const searchBar = document.querySelector("#searchbar");
+  const searchDish = searchBar.value.toLowerCase();
   const suggestionAppareils = document.getElementById("suggestions-appareils");
   suggestionAppareils.innerHTML = "";
   const searchBarAppareils = document.getElementById("appareils");
   let searchAppliance = searchBarAppareils.value.toLowerCase();
 
-  // Création d'une nouvelle liste d'appareils correspondant à la recherche
-  let matchingAppareils = [];
-
-  for (const appliance of applianceList) {
-    if (appliance.includes(searchAppliance)) {
-      matchingAppareils.push(appliance);
+  // Obtenir la liste des appareils présents dans les recettes filtrées
+  let filteredAppliances = [];
+  filteredCardArray.forEach((recipe) => {
+    const appliance = recipe.appliance.toLowerCase();
+    if (!filteredAppliances.includes(appliance)) {
+      filteredAppliances.push(appliance);
     }
-  }
+  });
+  console.log(filteredAppliances);
 
-  for (const appliance of matchingAppareils) {
+  // Créer une nouvelle liste d'appareils correspondant à la recherche
+  let matchingAppareils = applianceList.filter((appliance) => {
+    return appliance.includes(searchAppliance);
+  });
+
+  matchingAppareils.forEach((appliance) => {
     const pAppareils = document.createElement("p");
     pAppareils.textContent = appliance;
     pAppareils.setAttribute("id", "pAppareils");
@@ -611,25 +650,47 @@ function displayAppliance(applianceList) {
         searchByTagAlgo();
       }
     });
-  }
+  });
 
   const pAppareils = suggestionAppareils.querySelectorAll("p");
 
-  searchBarAppareils.addEventListener("keyup", function () {
-    let searchAppliance = searchBarAppareils.value.toLowerCase();
+  // Filtrer les ingrédients en fonction des recettes filtrées et de la recherche d'ingrédients
+  pAppareils.forEach((p) => {
+    const applianceText = p.textContent.toLowerCase();
+    const isApplianceInFilteredRecipes =
+      filteredAppliances.includes(applianceText);
+    const isApplianceMatchingSearch = matchingAppareils.includes(applianceText);
 
-    // Recréation la liste d'appareils correspondant à la recherche
-    let matchingAppareils = [];
-
-    for (const appliance of applianceList) {
-      if (appliance.includes(searchAppliance)) {
-        matchingAppareils.push(appliance);
-      }
+    if (
+      searchDish === "" ||
+      (isApplianceInFilteredRecipes && isApplianceMatchingSearch)
+    ) {
+      p.style.display = "block";
+    } else {
+      p.style.display = "none";
     }
+  });
 
-    // Affichage uniquement des éléments de la liste correspondant à la recherche
+  searchBarAppareils.addEventListener("keyup", function () {
+    searchAppliance = searchBarAppareils.value.toLowerCase();
+
+    // Recréer la liste d'appareils correspondant à la recherche
+    matchingAppareils = applianceList.filter((appliance) => {
+      return appliance.includes(searchAppliance);
+    });
+
+    // Filtrer les appareils en fonction des recettes filtrées et de la recherche d'appareils
     pAppareils.forEach((p) => {
-      if (matchingAppareils.includes(p.textContent)) {
+      const applianceText = p.textContent.toLowerCase();
+      const isApplianceInFilteredRecipes =
+        filteredAppliances.includes(applianceText);
+      const isApplianceMatchingSearch =
+        matchingAppareils.includes(applianceText);
+
+      if (
+        searchDish === "" ||
+        (isApplianceInFilteredRecipes && isApplianceMatchingSearch)
+      ) {
         p.style.display = "block";
       } else {
         p.style.display = "none";
@@ -668,73 +729,102 @@ function getUstensils() {
   });
 }
 
-function displayUstensiles() {
+function displayUstensiles(ustensilsList) {
+  const searchBar = document.querySelector("#searchbar");
+  const searchDish = searchBar.value.toLowerCase();
   const suggestionUstensils = document.getElementById("suggestions-ustensiles");
   suggestionUstensils.innerHTML = "";
   const searchBarUstensiles = document.getElementById("ustensiles");
   let searchUstensil = searchBarUstensiles.value.toLowerCase();
 
-  getUstensils().then((ustensilsList) => {
-    // Création d'une nouvelle liste d'ustensiles correspondant à la recherche
-    let matchingUstensils = [];
-
-    for (const ustensil of ustensilsList) {
-      if (ustensil.includes(searchUstensil)) {
-        matchingUstensils.push(ustensil);
+  // Obtenir la liste des ustensiles présents dans les recettes filtrées
+  let filteredUstensils = [];
+  filteredCardArray.forEach((recipe) => {
+    recipe.ustensils.forEach((ustensil) => {
+      const lowerCaseUstensil = ustensil.toLowerCase();
+      if (!filteredUstensils.includes(lowerCaseUstensil)) {
+        filteredUstensils.push(lowerCaseUstensil);
       }
-    }
+    });
+  });
+  console.log(filteredUstensils);
 
-    for (const ustensil of matchingUstensils) {
-      const pUstensils = document.createElement("p");
-      pUstensils.textContent = ustensil;
-      pUstensils.setAttribute("id", "pUstensils");
-      suggestionUstensils.appendChild(pUstensils);
-      pUstensils.addEventListener("click", function () {
-        const pUstensilText = pUstensils.textContent;
-        if (!tagArray.includes(pUstensilText.toLowerCase())) {
-          const tag = document.getElementById("tag-liste");
-          const divTag = document.createElement("div");
-          divTag.setAttribute("class", "tag-ustensile");
-          const uTag = document.createElement("p");
-          uTag.setAttribute("class", "text-ustensile-tag");
-          uTag.textContent = pUstensilText;
-          const crossTag = document.createElement("i");
-          crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
-          crossTag.addEventListener("click", function () {
-            removeTag(pUstensilText.toLowerCase());
-            searchByTagAlgo();
-          });
-          divTag.appendChild(uTag);
-          divTag.appendChild(crossTag);
-          tag.appendChild(divTag);
-          tagArray.push(pUstensilText.toLowerCase());
+  // Créer une nouvelle liste d'ustensiles correspondant à la recherche
+  let matchingUstensils = ustensilsList.filter((ustensil) => {
+    return ustensil.includes(searchUstensil);
+  });
+
+  matchingUstensils.forEach((ustensil) => {
+    const pUstensils = document.createElement("p");
+    pUstensils.textContent = ustensil;
+    pUstensils.setAttribute("id", "pUstensils");
+    suggestionUstensils.appendChild(pUstensils);
+    pUstensils.addEventListener("click", function () {
+      const pUstensilText = pUstensils.textContent;
+      if (!tagArray.includes(pUstensilText.toLowerCase())) {
+        const tag = document.getElementById("tag-liste");
+        const divTag = document.createElement("div");
+        divTag.setAttribute("class", "tag-ustensile");
+        const uTag = document.createElement("p");
+        uTag.setAttribute("class", "text-ustensile-tag");
+        uTag.textContent = pUstensilText;
+        const crossTag = document.createElement("i");
+        crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
+        crossTag.addEventListener("click", function () {
+          removeTag(pUstensilText.toLowerCase());
           searchByTagAlgo();
-        }
-      });
-    }
-
-    const pUstensils = suggestionUstensils.querySelectorAll("p");
-
-    searchBarUstensiles.addEventListener("keyup", function () {
-      let searchUstensil = searchBarUstensiles.value.toLowerCase();
-
-      // Recréation la liste d'ustensils correspondant à la recherche
-      let matchingUstensils = [];
-
-      for (const ustensil of ustensilsList) {
-        if (ustensil.includes(searchUstensil)) {
-          matchingUstensils.push(ustensil);
-        }
+        });
+        divTag.appendChild(uTag);
+        divTag.appendChild(crossTag);
+        tag.appendChild(divTag);
+        tagArray.push(pUstensilText.toLowerCase());
+        searchByTagAlgo();
       }
+    });
+  });
 
-      // Affichage uniquement des éléments de la liste correspondant à la recherche
-      pUstensils.forEach((p) => {
-        if (matchingUstensils.includes(p.textContent)) {
-          p.style.display = "block";
-        } else {
-          p.style.display = "none";
-        }
-      });
+  const pUstensils = suggestionUstensils.querySelectorAll("p");
+
+  // Filtrer les ingrédients en fonction des recettes filtrées et de la recherche d'ingrédients
+  pUstensils.forEach((p) => {
+    const ustensilText = p.textContent.toLowerCase();
+    const isUstensilInFilteredRecipes =
+      filteredUstensils.includes(ustensilText);
+    const isUstensilMatchingSearch = matchingUstensils.includes(ustensilText);
+
+    if (
+      searchDish === "" ||
+      (isUstensilInFilteredRecipes && isUstensilMatchingSearch)
+    ) {
+      p.style.display = "block";
+    } else {
+      p.style.display = "none";
+    }
+  });
+
+  searchBarUstensiles.addEventListener("keyup", function () {
+    searchUstensil = searchBarUstensiles.value.toLowerCase();
+
+    // Recréer la liste d'ustensiles correspondant à la recherche
+    matchingUstensils = ustensilsList.filter((ustensil) => {
+      return ustensil.includes(searchUstensil);
+    });
+
+    // Filtrer les ustensiles en fonction des recettes filtrées et de la recherche d'ustensiles
+    pUstensils.forEach((p) => {
+      const ustensilText = p.textContent.toLowerCase();
+      const isUstensilInFilteredRecipes =
+        filteredUstensils.includes(ustensilText);
+      const isUstensilMatchingSearch = matchingUstensils.includes(ustensilText);
+
+      if (
+        searchDish === "" ||
+        (isUstensilInFilteredRecipes && isUstensilMatchingSearch)
+      ) {
+        p.style.display = "block";
+      } else {
+        p.style.display = "none";
+      }
     });
   });
 }
