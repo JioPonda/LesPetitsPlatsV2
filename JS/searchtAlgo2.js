@@ -109,7 +109,7 @@ function filteredCardFactory(data) {
 }
 
 /*************************************************/
-/*******  ALGORYTHME DE RECHERCHE V1 *************/
+/*******  ALGORYTHME DE RECHERCHE V2 *************/
 /*************************************************/
 
 // Tableau contenant les card crée après une cherche
