@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/Favicon.png" />
-    <link rel="stylesheet" href="CSS/style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/Favicon.png">
+    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans&ampdisplay=swap"
       rel="stylesheet"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans&ampfamily=Lato:wght@400;700&ampdisplay=swap"
       rel="stylesheet"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin >
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans&ampfamily=Lato:wght@400;700&ampdisplay=swap"
       rel="stylesheet"
-    />
+    >
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-    />
+    >
     <title>Les petits plats</title>
   </head>
   <body>
     <!-- logo et barre de recherche -->
     <header>
-      <img src="assets/LOGO.png" alt="Logo du site 'Les petits plats'" />
+      <img src="assets/LOGO.png" alt="Logo du site 'Les petits plats'">
       <h1>Les petits plats</h1>
       <i class="fa-solid fa-magnifying-glass"></i>
       <input
@@ -44,7 +44,7 @@
         name="search"
         placeholder="Rechercher une recette"
         onclick="hideIngredientList (), hideUstensilesList (),hideAppareilsList ()"
-      />
+      >
       <p id="error-search">
         « Aucune recette ne correspond à votre critère… vous pouvez chercher «
         tarte aux pommes », « poisson », etc.
@@ -62,7 +62,7 @@
               name="ingredients"
               placeholder="Ingredient"
               onclick="ingredientSearch (),hideAppareilsList (),hideUstensilesList ()"
-            />
+            >
             <!-- onfocusout="hideIngredientList ()" -->
             <i
               class="fa-solid fa-chevron-up chevron-ingredients"
@@ -78,7 +78,7 @@
               name="appareils"
               placeholder="Appareils"
               onclick="applianceSearch (),hideIngredientList (), hideUstensilesList ()"
-            />
+            >
             <i
               class="fa-solid fa-chevron-up chevron-appareils"
               onclick="hideAppareilsList ()"
@@ -92,7 +92,7 @@
               name="ustensiles"
               placeholder="Ustensiles"
               onclick="ustensilsSearch (),hideIngredientList (),hideAppareilsList ()"
-            />
+            >
             <i
               class="fa-solid fa-chevron-up chevron-ustensiles"
               onclick="hideUstensilesList ()"
