@@ -34,12 +34,12 @@ header h1 {
 
 header input {
   /* barre de recherche */
-  width: 80vw;
+  width: 89vw;
   height: 69px;
   background: #e7e7e7;
   border-color: #fff;
   border-radius: 5px;
-  margin: 20px 0 0 0vw;
+  margin: 20px 0 0 -0.5vw;
 
   /* placeholder */
   font-style: normal;
@@ -52,7 +52,7 @@ header input {
 .fa-magnifying-glass {
   font-size: 40px;
   position: absolute;
-  margin: 160px 0 0 75vw;
+  margin: 160px 0 0 85vw;
 }
 
 #error-search {
@@ -68,7 +68,7 @@ header input {
   flex-direction: row;
   flex-wrap: wrap;
   width: 80vw;
-  margin: 15px 0 0 9vw;
+  margin: 15px 0 0 3.6vw;
 }
 
 .tag-ingredient {
@@ -137,7 +137,7 @@ header input {
 .search-zone {
   display: flex;
   flex-direction: row;
-  margin: 50px 0 0 4vw;
+  margin: 10px 0 0 -1vw;
 }
 
 .select-buttons {
@@ -480,8 +480,26 @@ header input {
 }
 
 @media screen and (max-width: 1440px) {
+
+  header input {
+    width: 89.5vw;
+    margin: 20px 0 0 -1vw;
+  }
+
+  #tag-liste {
+    display: flex;
+    flex-flow: row wrap;
+    width: 80vw;
+    margin: 15px 0px 10px 3.5vw;
+}
+
+  .fa-magnifying-glass {
+    font-size: 30px;
+    margin: 163px 0 0 83vw;
+  }
+
   .search-zone {
-    margin: 0px 0 0 4vw;
+    margin: 0px 0 0 -1vw;
   }
 
   #error-search {
@@ -543,13 +561,22 @@ header input {
 }
 
 @media screen and (max-width: 1024px) {
+
+  header input {
+    width: 91vw;
+    height: 69px;
+    background: #e7e7e7;
+    border-color: #fff;
+    border-radius: 5px;
+    margin: 20px 0 0 1vw;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.125em;
+}
+
   .fa-magnifying-glass {
     font-size: 30px;
-    margin: 162px 0 0 74vw;
-  }
-
-  .search-zone {
-    margin: 0px 0 0 7vw;
+    margin: 163px 0 0 86vw;
   }
 
   #error-search {

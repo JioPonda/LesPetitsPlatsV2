@@ -138,16 +138,13 @@ function searchAlgo() {
     const filteredRecipes = [];
     for (let i = 0; i < recipesList.length; i++) {
       const recipe = recipesList[i];
-      const { name, ingredients, appliance, ustensils } = recipe;
+      const { name, ingredients, description } = recipe;
       if (
         name.toLowerCase().includes(searchDish) ||
         ingredients.some((ingredient) =>
           ingredient.ingredient.toLowerCase().includes(searchDish)
         ) ||
-        appliance.toLowerCase().includes(searchDish) ||
-        ustensils.some((ustensil) =>
-          ustensil.toLowerCase().includes(searchDish)
-        )
+        description.toLowerCase().includes(searchDish)
       ) {
         filteredRecipes.push(recipe);
       }
@@ -533,7 +530,7 @@ function displayIngredients(ingredientsList) {
       matchingIngredients.includes(ingredientText);
 
     if (
-      searchDish === "" ||
+      !searchDish === "" ||
       (isIngredientInFilteredRecipes && isIngredientMatchingSearch)
     ) {
       p.style.display = "block";
@@ -559,6 +556,7 @@ function displayIngredients(ingredientsList) {
         matchingIngredients.includes(ingredientText);
 
       if (
+        !searchDish === "" ||
         (isIngredientInFilteredRecipes && isIngredientMatchingSearch)
       ) {
         p.style.display = "block";
@@ -658,7 +656,7 @@ function displayAppliance(applianceList) {
     const isApplianceMatchingSearch = matchingAppareils.includes(applianceText);
 
     if (
-      searchDish === "" ||
+      !searchDish === "" ||
       (isApplianceInFilteredRecipes && isApplianceMatchingSearch)
     ) {
       p.style.display = "block";
@@ -684,6 +682,7 @@ function displayAppliance(applianceList) {
         matchingAppareils.includes(applianceText);
 
       if (
+        !searchDish === "" ||
         (isApplianceInFilteredRecipes && isApplianceMatchingSearch)
       ) {
         p.style.display = "block";
@@ -787,7 +786,7 @@ function displayUstensiles(ustensilsList) {
     const isUstensilMatchingSearch = matchingUstensils.includes(ustensilText);
 
     if (
-      searchDish === "" ||
+      !searchDish === "" ||
       (isUstensilInFilteredRecipes && isUstensilMatchingSearch)
     ) {
       p.style.display = "block";
@@ -812,6 +811,7 @@ function displayUstensiles(ustensilsList) {
       const isUstensilMatchingSearch = matchingUstensils.includes(ustensilText);
 
       if (
+        !searchDish === "" ||
         (isUstensilInFilteredRecipes && isUstensilMatchingSearch)
       ) {
         p.style.display = "block";
