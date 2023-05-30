@@ -346,7 +346,6 @@ const debouncedSearchBar = debounce(function () {
   if (searchDish.length >= 3) {
     filteredCardContainer.innerHTML = "";
     searchAlgo();
-    console.log("ici");
   } else {
     recipesContainer.style.display = "grid";
     filteredCardContainer.style.display = "none";
@@ -470,7 +469,6 @@ function displayIngredients(ingredientsList) {
       }
     });
   });
-  console.log(filteredIngredients);
 
   // Créer une nouvelle liste d'ingrédients correspondant à la recherche
   let matchingIngredients = ingredientsList.filter((ingredient) => {
@@ -597,7 +595,6 @@ function displayAppliance(applianceList) {
       filteredAppliances.push(appliance);
     }
   });
-  console.log(filteredAppliances);
 
   // Créer une nouvelle liste d'appareils correspondant à la recherche
   let matchingAppareils = applianceList.filter((appliance) => {
@@ -728,7 +725,6 @@ function displayUstensiles(ustensilsList) {
       }
     });
   });
-  console.log(filteredUstensils);
 
   // Créer une nouvelle liste d'ustensiles correspondant à la recherche
   let matchingUstensils = ustensilsList.filter((ustensil) => {
