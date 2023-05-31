@@ -144,8 +144,8 @@ function searchAlgo() {
           ingredient.ingredient.toLowerCase().includes(searchDish)
         ) ||
         recipe.description.toLowerCase().includes(searchDish)
-        );
-      });
+      );
+    });
     filteredCardArray = filteredRecipes.map((recipe) =>
       filteredCardFactory(recipe)
     );
@@ -466,7 +466,6 @@ function displayIngredients(ingredientsList) {
       }
     });
   });
-
   // Créer une nouvelle liste d'ingrédients correspondant à la recherche
   let matchingIngredients = ingredientsList.filter((ingredient) => {
     return ingredient.includes(searchIngredient);
@@ -490,6 +489,8 @@ function displayIngredients(ingredientsList) {
         crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
         crossTag.addEventListener("click", function () {
           removeTag(pIngredientsText.toLowerCase());
+          searchByTagAlgo();
+          displayIngredients(ingredientsList);
         });
         divTag.appendChild(iTag);
         divTag.appendChild(crossTag);
@@ -497,6 +498,8 @@ function displayIngredients(ingredientsList) {
         tagArray.push(pIngredientsText.toLowerCase());
         searchByTagAlgo();
       }
+      updateFilteredResults();
+      displayIngredients(ingredientsList);
     });
   });
 
@@ -510,10 +513,7 @@ function displayIngredients(ingredientsList) {
     const isIngredientMatchingSearch =
       matchingIngredients.includes(ingredientText);
 
-    if (
-      !searchDish === "" ||
-      (isIngredientInFilteredRecipes && isIngredientMatchingSearch)
-    ) {
+    if (isIngredientInFilteredRecipes && isIngredientMatchingSearch) {
       p.style.display = "block";
     } else {
       p.style.display = "none";
@@ -536,10 +536,7 @@ function displayIngredients(ingredientsList) {
       const isIngredientMatchingSearch =
         matchingIngredients.includes(ingredientText);
 
-      if (
-        !searchDish === "" ||
-        (isIngredientInFilteredRecipes && isIngredientMatchingSearch)
-      ) {
+      if (isIngredientInFilteredRecipes && isIngredientMatchingSearch) {
         p.style.display = "block";
       } else {
         p.style.display = "none";
@@ -617,6 +614,7 @@ function displayAppliance(applianceList) {
         crossTag.addEventListener("click", function () {
           removeTag(pApplianceText.toLowerCase());
           searchByTagAlgo();
+          displayAppliance(applianceList);
         });
         divTag.appendChild(aTag);
         divTag.appendChild(crossTag);
@@ -624,6 +622,8 @@ function displayAppliance(applianceList) {
         tagArray.push(pApplianceText.toLowerCase());
         searchByTagAlgo();
       }
+      updateFilteredResults();
+      displayAppliance(applianceList);
     });
   });
 
@@ -747,6 +747,7 @@ function displayUstensiles(ustensilsList) {
         crossTag.addEventListener("click", function () {
           removeTag(pUstensilText.toLowerCase());
           searchByTagAlgo();
+          displayUstensiles(ustensilsList);
         });
         divTag.appendChild(uTag);
         divTag.appendChild(crossTag);
@@ -754,6 +755,8 @@ function displayUstensiles(ustensilsList) {
         tagArray.push(pUstensilText.toLowerCase());
         searchByTagAlgo();
       }
+      updateFilteredResults();
+      displayUstensiles(ustensilsList);
     });
   });
 
