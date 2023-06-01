@@ -138,16 +138,13 @@ function searchAlgo() {
     const filteredRecipes = [];
     for (let i = 0; i < recipesList.length; i++) {
       const recipe = recipesList[i];
-      const { name, ingredients, appliance, ustensils } = recipe;
+      const { name, ingredients, description } = recipe;
       if (
         name.toLowerCase().includes(searchDish) ||
         ingredients.some((ingredient) =>
           ingredient.ingredient.toLowerCase().includes(searchDish)
         ) ||
-        appliance.toLowerCase().includes(searchDish) ||
-        ustensils.some((ustensil) =>
-          ustensil.toLowerCase().includes(searchDish)
-        )
+        description.toLowerCase().includes(searchDish)
       ) {
         filteredRecipes.push(recipe);
       }
