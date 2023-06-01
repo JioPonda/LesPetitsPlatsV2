@@ -301,6 +301,10 @@ function updateFilteredResults() {
           recipe.ingredients.some((ingredient) =>
             ingredient.ingredient.toLowerCase().includes(searchDish)
           ) ||
+          recipe.appliance.toLowerCase().includes(searchDish) ||
+          recipe.ustensils.some((ustensil) =>
+            ustensil.toLowerCase().includes(searchDish)
+          ) ||
           recipe.description.toLowerCase().includes(searchDish)
         );
       });
