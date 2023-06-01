@@ -543,7 +543,7 @@ header input {
 
   .filtered-card-ingredient {
     font-size: 0.7em;
-    margin-top: -7px;
+    margin-top: -9px;
   }
 
   .filtered-card-clock {
@@ -588,7 +588,7 @@ header input {
   }
 
   #tag-liste {
-    margin: 15px 0 0 11vw;
+    margin: 15px 0 0 3vw;
   }
 
   #ingredient {
@@ -693,7 +693,7 @@ header input {
 
   .filtered-card-ingredient {
     font-size: 0.85em;
-    margin-top: -8px;
+    margin-top: -11px;
   }
 
   .filtered-card-clock {
