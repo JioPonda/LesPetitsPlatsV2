@@ -189,11 +189,11 @@ function searchByTagAlgo() {
             recipe.appliance.toLowerCase().includes(tag) ||
             recipe.ustensils.some((ustensil) =>
               ustensil.toLowerCase().includes(tag)
-            )
+            ) ||
+            recipe.description.toLowerCase().includes(tag)
           );
         });
       });
-
       filteredCardContainer.innerHTML = "";
       filteredRecipes.forEach((recipe) => {
         const filteredCard = filteredCardFactory(recipe);
@@ -229,7 +229,8 @@ function searchByTagAlgo() {
           card.appliance.toLowerCase().includes(tag) ||
           card.ustensils.some((ustensil) =>
             ustensil.toLowerCase().includes(tag)
-          )
+          ) ||
+          card.description.toLowerCase().includes(tag)
         );
       });
     });
@@ -295,7 +296,13 @@ function updateFilteredResults() {
     if (searchDish.length >= 3) {
       // Filtrer les recettes en fonction du terme de recherche principal
       filteredRecipes = filteredRecipes.filter((recipe) => {
-        return recipe.name.toLowerCase().includes(searchDish);
+        return (
+          recipe.name.toLowerCase().includes(searchDish) ||
+          recipe.ingredients.some((ingredient) =>
+            ingredient.ingredient.toLowerCase().includes(searchDish)
+          ) ||
+          recipe.description.toLowerCase().includes(searchDish)
+        );
       });
     }
 
@@ -311,7 +318,7 @@ function updateFilteredResults() {
       filteredCardContainer.appendChild(filteredCardDOM);
     });
 
-    if (filteredRecipes.length === 0) {
+    if (filteredRecipes.length == 0) {
       errorMessage.style.display = "block";
     } else {
       errorMessage.style.display = "none";
@@ -489,7 +496,6 @@ function displayIngredients(ingredientsList) {
         crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
         crossTag.addEventListener("click", function () {
           removeTag(pIngredientsText.toLowerCase());
-          searchByTagAlgo();
           displayIngredients(ingredientsList);
         });
         divTag.appendChild(iTag);
@@ -613,7 +619,6 @@ function displayAppliance(applianceList) {
         crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
         crossTag.addEventListener("click", function () {
           removeTag(pApplianceText.toLowerCase());
-          searchByTagAlgo();
           displayAppliance(applianceList);
         });
         divTag.appendChild(aTag);
@@ -636,10 +641,7 @@ function displayAppliance(applianceList) {
       filteredAppliances.includes(applianceText);
     const isApplianceMatchingSearch = matchingAppareils.includes(applianceText);
 
-    if (
-      !searchDish === "" ||
-      (isApplianceInFilteredRecipes && isApplianceMatchingSearch)
-    ) {
+    if (isApplianceInFilteredRecipes && isApplianceMatchingSearch) {
       p.style.display = "block";
     } else {
       p.style.display = "none";
@@ -662,10 +664,7 @@ function displayAppliance(applianceList) {
       const isApplianceMatchingSearch =
         matchingAppareils.includes(applianceText);
 
-      if (
-        !searchDish === "" ||
-        (isApplianceInFilteredRecipes && isApplianceMatchingSearch)
-      ) {
+      if (isApplianceInFilteredRecipes && isApplianceMatchingSearch) {
         p.style.display = "block";
       } else {
         p.style.display = "none";
@@ -746,7 +745,6 @@ function displayUstensiles(ustensilsList) {
         crossTag.setAttribute("class", "fa-regular fa-circle-xmark");
         crossTag.addEventListener("click", function () {
           removeTag(pUstensilText.toLowerCase());
-          searchByTagAlgo();
           displayUstensiles(ustensilsList);
         });
         divTag.appendChild(uTag);
@@ -769,10 +767,7 @@ function displayUstensiles(ustensilsList) {
       filteredUstensils.includes(ustensilText);
     const isUstensilMatchingSearch = matchingUstensils.includes(ustensilText);
 
-    if (
-      !searchDish === "" ||
-      (isUstensilInFilteredRecipes && isUstensilMatchingSearch)
-    ) {
+    if (isUstensilInFilteredRecipes && isUstensilMatchingSearch) {
       p.style.display = "block";
     } else {
       p.style.display = "none";
@@ -794,10 +789,7 @@ function displayUstensiles(ustensilsList) {
         filteredUstensils.includes(ustensilText);
       const isUstensilMatchingSearch = matchingUstensils.includes(ustensilText);
 
-      if (
-        !searchDish === "" ||
-        (isUstensilInFilteredRecipes && isUstensilMatchingSearch)
-      ) {
+      if (isUstensilInFilteredRecipes && isUstensilMatchingSearch) {
         p.style.display = "block";
       } else {
         p.style.display = "none";
