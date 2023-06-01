@@ -186,7 +186,7 @@ function searchByTagAlgo() {
       const filteredRecipes = [];
       for (let i = 0; i < recipesList.length; i++) {
         const recipe = recipesList[i];
-        const { ingredients, appliance, ustensils } = recipe;
+        const { ingredients, appliance, ustensils, description } = recipe;
         if (
           searchTags.every((tag) => {
             return (
@@ -194,7 +194,10 @@ function searchByTagAlgo() {
                 ingredient.ingredient.toLowerCase().includes(tag)
               ) ||
               appliance.toLowerCase().includes(tag) ||
-              ustensils.some((ustensil) => ustensil.toLowerCase().includes(tag))
+              ustensils.some((ustensil) =>
+                ustensil.toLowerCase().includes(tag)
+              ) ||
+              description.toLowerCase().includes(tag)
             );
           })
         ) {
@@ -237,7 +240,8 @@ function searchByTagAlgo() {
           card.appliance.toLowerCase().includes(tag) ||
           card.ustensils.some((ustensil) =>
             ustensil.toLowerCase().includes(tag)
-          )
+          ) ||
+          card.description.toLowerCase().includes(tag)
         );
       });
     });
@@ -311,7 +315,14 @@ function updateFilteredResults() {
       const searchResults = [];
       for (let i = 0; i < filteredRecipes.length; i++) {
         const recipe = filteredRecipes[i];
-        if (recipe.name.toLowerCase().includes(searchDish)) {
+        if (
+          recipe.name.toLowerCase().includes(searchDish) ||
+          recipe.appliance.toLowerCase().includes(searchDish) ||
+          recipe.ustensils.some((ustensil) =>
+            ustensil.toLowerCase().includes(searchDish)
+          ) ||
+          recipe.description.toLowerCase().includes(searchDish)
+        ) {
           searchResults.push(recipe);
         }
       }
