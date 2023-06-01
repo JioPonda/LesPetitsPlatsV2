@@ -596,7 +596,8 @@ header input {
   }
 
   #pIngredient {
-    font-size: 1.15em;
+    font-size: 0.95em;
+    margin-left: 0;
   }
 
   #appareils {
@@ -604,11 +605,17 @@ header input {
   }
 
   #pAppareils {
-    font-size: 1.15em;
+    font-size: 0.95em;
+    margin-left: 0;
   }
 
   #ustensiles {
     width: 20vw;
+  }
+
+  #pUstensils {
+    font-size: 0.95em;
+    margin-left: 0;
   }
 
   .chevron-ingredients {
