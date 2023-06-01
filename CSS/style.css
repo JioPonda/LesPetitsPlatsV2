@@ -175,6 +175,8 @@ header input {
 
 #pIngredient {
   color: #fff;
+  margin-top: 15px;
+  margin-left: 0.5vw;
   padding: 5%;
 }
 
@@ -215,6 +217,7 @@ header input {
 #pAppareils {
   color: #fff;
   margin-top: 15px;
+  margin-left: 0.5vw;
   padding: 5%;
 }
 
@@ -255,6 +258,7 @@ header input {
 #pUstensils {
   color: #fff;
   margin-top: 15px;
+  margin-left: 0.5vw;
   padding: 5%;
 }
 
