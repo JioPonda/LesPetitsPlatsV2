@@ -175,6 +175,8 @@ header input {
 
 #pIngredient {
   color: #fff;
+  margin-top: 15px;
+  margin-left: 0.5vw;
   padding: 5%;
 }
 
@@ -215,6 +217,7 @@ header input {
 #pAppareils {
   color: #fff;
   margin-top: 15px;
+  margin-left: 0.5vw;
   padding: 5%;
 }
 
@@ -255,6 +258,7 @@ header input {
 #pUstensils {
   color: #fff;
   margin-top: 15px;
+  margin-left: 0.5vw;
   padding: 5%;
 }
 
@@ -584,7 +588,7 @@ header input {
   }
 
   #tag-liste {
-    margin: 15px 0 0 11vw;
+    margin: 15px 0 0 3vw;
   }
 
   #ingredient {
@@ -592,7 +596,8 @@ header input {
   }
 
   #pIngredient {
-    font-size: 1.15em;
+    font-size: 0.95em;
+    margin-left: 0;
   }
 
   #appareils {
@@ -600,11 +605,17 @@ header input {
   }
 
   #pAppareils {
-    font-size: 1.15em;
+    font-size: 0.95em;
+    margin-left: 0;
   }
 
   #ustensiles {
     width: 20vw;
+  }
+
+  #pUstensils {
+    font-size: 0.95em;
+    margin-left: 0;
   }
 
   .chevron-ingredients {
