@@ -175,8 +175,7 @@ header input {
 
 #pIngredient {
   color: #fff;
-  margin-top: 15px;
-  margin-left: 0.5vw;
+  margin: 15px;
   padding: 5%;
 }
 
@@ -216,8 +215,7 @@ header input {
 
 #pAppareils {
   color: #fff;
-  margin-top: 15px;
-  margin-left: 0.5vw;
+  margin: 15px;
   padding: 5%;
 }
 
@@ -257,8 +255,7 @@ header input {
 
 #pUstensils {
   color: #fff;
-  margin-top: 15px;
-  margin-left: 0.5vw;
+  margin: 15px;
   padding: 5%;
 }
 
@@ -484,7 +481,6 @@ header input {
 }
 
 @media screen and (max-width: 1440px) {
-
   header input {
     width: 89.5vw;
     margin: 20px 0 0 -1vw;
@@ -495,7 +491,7 @@ header input {
     flex-flow: row wrap;
     width: 80vw;
     margin: 15px 0px 10px 3.5vw;
-}
+  }
 
   .fa-magnifying-glass {
     font-size: 30px;
@@ -565,7 +561,6 @@ header input {
 }
 
 @media screen and (max-width: 1024px) {
-
   header input {
     width: 91vw;
     height: 69px;
@@ -576,7 +571,7 @@ header input {
     font-style: normal;
     font-weight: 400;
     font-size: 1.125em;
-}
+  }
 
   .fa-magnifying-glass {
     font-size: 30px;
