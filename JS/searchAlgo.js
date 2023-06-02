@@ -136,7 +136,7 @@ function searchAlgo() {
   getRecipes().then((data) => {
     const recipesList = data.recipes;
     const filteredRecipes = recipesList.filter((recipe) => {
-      // Rechercher le terme dans le nom de la recette, le nom de l'ingrédient
+      // Recherche du terme dans le nom de la recette, le nom de l'ingrédient
       // et dans la description
       return (
         recipe.name.toLowerCase().includes(searchDish) ||
@@ -149,15 +149,15 @@ function searchAlgo() {
     filteredCardArray = filteredRecipes.map((recipe) =>
       filteredCardFactory(recipe)
     );
-    // Supprimer les anciennes cartes de la grille de cartes filtrées
+    // Suppression des anciennes cartes de la grille de cartes filtrées
     filteredCardContainer.innerHTML = "";
-    // Créer de nouvelles cartes pour chaque recette filtrée
+    // Créeation de nouvelles cartes pour chaque recette filtrée
     filteredRecipes.forEach((recipe) => {
       const filteredCard = filteredCardFactory(recipe);
       const filteredCardDOM = filteredCard.getFilteredCardDOM();
       filteredCardContainer.appendChild(filteredCardDOM);
     });
-    // Afficher un message d'erreur si aucune recette ne correspond à la recherche
+    // Affichage du message d'erreur si aucune recette ne correspond à la recherche
     if (filteredRecipes.length === 0) {
       errorMessage.style.display = "block";
       filteredCardArray = [];
@@ -176,7 +176,7 @@ function searchByTagAlgo() {
   const errorMessage = document.querySelector("#error-search");
   const recipesContainer = document.querySelector(".all-card-container");
   const searchTags = tagArray.map((tag) => tag.toLowerCase());
-  // recherche par tag uniquement
+  // Recherche par tag uniquement
   if (searchDish.length === 0) {
     getRecipes().then((data) => {
       const recipesList = data.recipes;
@@ -353,13 +353,13 @@ const debouncedSearchBar = debounce(function () {
   const searchDish = searchBar.value.toLowerCase();
   if (searchDish.length >= 3) {
     filteredCardContainer.innerHTML = "";
-    searchAlgo();
   } else {
     recipesContainer.style.display = "grid";
     filteredCardContainer.style.display = "none";
     errorMessage.style.display = "none";
     filteredCardArray = [];
   }
+  updateFilteredResults();
 }, searchDelay);
 
 searchBar.addEventListener("keyup", debouncedSearchBar);
@@ -404,6 +404,7 @@ function removeTag(tagText) {
         removed = true;
         break;
       }
+      updateFilteredResults();
     }
   }
 
@@ -419,6 +420,7 @@ function removeTag(tagText) {
         tagArray = tagArray.filter((tag) => tag !== tagText);
         break;
       }
+      updateFilteredResults();
     }
   }
 
@@ -430,7 +432,11 @@ function removeTag(tagText) {
     searchAlgo();
   }
 
-  // Mettre à jour les résultats de recherche après la suppression d'un tag
+  if (tagArray.length === 0) {
+    updateFilteredResults();
+  }
+
+  // Mise à jour des résultats de recherche après la suppression d'un tag
   updateFilteredResults();
   searchByTagAlgo();
 }
