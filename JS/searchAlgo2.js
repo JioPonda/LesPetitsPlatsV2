@@ -158,17 +158,19 @@ function searchAlgo() {
       if (!isMatching && description.toLowerCase().indexOf(searchDish) !== -1) {
         isMatching = true;
       }
-      
+
       if (isMatching) {
         filteredRecipes.push(recipe);
       }
     }
-    
-    filteredCardArray = filteredRecipes.map((recipe) => filteredCardFactory(recipe));
-    
+
+    filteredCardArray = filteredRecipes.map((recipe) =>
+      filteredCardFactory(recipe)
+    );
+
     // Suppression des anciennes cartes de la grille de cartes filtrées
     filteredCardContainer.innerHTML = "";
-    
+
     // Création de nouvelles cartes pour chaque recette filtrée
     for (let k = 0; k < filteredRecipes.length; k++) {
       const recipe = filteredRecipes[k];
@@ -176,7 +178,7 @@ function searchAlgo() {
       const filteredCardDOM = filteredCard.getFilteredCardDOM();
       filteredCardContainer.appendChild(filteredCardDOM);
     }
-    
+
     // Affichage du message d'erreur si aucune recette ne correspond à la recherche
     if (filteredRecipes.length === 0) {
       errorMessage.style.display = "block";
@@ -189,10 +191,12 @@ function searchAlgo() {
 
 /**** Recherche par Tag ****/
 function searchByTagAlgo() {
-  const searchDish = searchBar.value.toLowerCase().trim(); 
-  const filteredCardContainer = document.querySelector(".filtered-card-container"); 
-  const errorMessage = document.querySelector("#error-search"); 
-  const recipesContainer = document.querySelector(".all-card-container"); 
+  const searchDish = searchBar.value.toLowerCase().trim();
+  const filteredCardContainer = document.querySelector(
+    ".filtered-card-container"
+  ); // Conteneur des cartes filtrées
+  const errorMessage = document.querySelector("#error-search");
+  const recipesContainer = document.querySelector(".all-card-container");
   const searchTags = tagArray.map((tag) => tag.toLowerCase());
 
   // Recherche par tag uniquement
@@ -200,33 +204,38 @@ function searchByTagAlgo() {
     getRecipes().then((data) => {
       const recipesList = data.recipes;
       const filteredRecipes = [];
-      
+
+      // Filtre des recettes en fonction des tags de recherche
       for (let i = 0; i < recipesList.length; i++) {
         const recipe = recipesList[i];
         const { ingredients, appliance, ustensils, description } = recipe;
         let isValidRecipe = true;
-        
-        // Boucle pour parcourir tous les tags de recherche
+
+        // Vérification de la présence de chaque tag dans les ingrédients, l'appareil, les ustensiles ou la description
         for (let j = 0; j < searchTags.length; j++) {
           const tag = searchTags[j];
-        
-          // Vérification de la présence de chaque tag dans les ingrédients, l'appareil, les ustensiles ou la description
+
           if (
-            ingredients.every((ingredient) => !ingredient.ingredient.toLowerCase().includes(tag)) ||
-            !appliance.toLowerCase().includes(tag) ||
-            ustensils.every((ustensil) => !ustensil.toLowerCase().includes(tag)) ||
+            !ingredients.some((ingredient) =>
+              ingredient.ingredient.toLowerCase().includes(tag)
+            ) &&
+            !appliance.toLowerCase().includes(tag) &&
+            !ustensils.some((ustensil) =>
+              ustensil.toLowerCase().includes(tag)
+            ) &&
             !description.toLowerCase().includes(tag)
           ) {
             isValidRecipe = false; // Si un tag n'est pas trouvé, la recette n'est pas valide
             break;
           }
         }
-        
+
         if (isValidRecipe) {
           filteredRecipes.push(recipe); // Ajouter la recette filtrée à la liste des recettes filtrées
         }
       }
-      
+
+      // Affichage des cartes filtrées dans le conteneur
       filteredCardContainer.innerHTML = "";
       for (let i = 0; i < filteredRecipes.length; i++) {
         const recipe = filteredRecipes[i];
@@ -235,6 +244,7 @@ function searchByTagAlgo() {
         filteredCardContainer.appendChild(filteredCardDOM);
       }
 
+      // Affichage du message d'erreur si aucune recette filtrée n'est trouvée
       if (filteredRecipes.length === 0) {
         errorMessage.style.display = "block";
       } else {
@@ -242,6 +252,7 @@ function searchByTagAlgo() {
       }
     });
 
+    // Affichage des conteneurs appropriés en fonction des tags de recherche
     if (searchTags.length >= 1) {
       recipesContainer.style.display = "none";
       filteredCardContainer.style.display = "grid";
@@ -252,39 +263,44 @@ function searchByTagAlgo() {
     }
   }
 
-  // Recherche par tag en fonction de la recherche de la barre principale
+  // Recherche par tag en fonction de la recherche principale de la barre
   if (searchDish.length >= 3 && tagArray.length > 0) {
     filteredCardArray = filteredCardArray.filter((card) => {
       let isValidCard = true;
-      
-      // Boucle pour parcourir tous les tags de recherche
+
+      // Vérification de la présence de chaque tag dans le nom, les ingrédients, l'appareil, les ustensiles ou la description de la carte
       for (let i = 0; i < searchTags.length; i++) {
         const tag = searchTags[i];
-        
-        // Vérification de la présence de chaque tag dans le nom, les ingrédients, l'appareil, les ustensiles ou la description de la carte
+
         if (
-          card.name.toLowerCase().includes(tag) ||
-          card.ingredients.some((ingredient) => ingredient.ingredient.toLowerCase().includes(tag)) ||
-          card.appliance.toLowerCase().includes(tag) ||
-          card.ustensils.some((ustensil) => ustensil.toLowerCase().includes(tag)) ||
-          card.description.toLowerCase().includes(tag)
+          !card.name.toLowerCase().includes(tag) &&
+          !card.ingredients.some((ingredient) =>
+            ingredient.ingredient.toLowerCase().includes(tag)
+          ) &&
+          !card.appliance.toLowerCase().includes(tag) &&
+          !card.ustensils.some((ustensil) =>
+            ustensil.toLowerCase().includes(tag)
+          ) &&
+          !card.description.toLowerCase().includes(tag)
         ) {
-          isValidCard = true; // Si un tag est trouvé, la carte est valide
+          isValidCard = false; // Si un tag n'est pas trouvé, la carte n'est pas valide
           break;
         }
       }
-      
+
       return isValidCard;
     });
-    
+
+    // Affichage des cartes filtrées dans le conteneur
     filteredCardContainer.innerHTML = "";
     for (let i = 0; i < filteredCardArray.length; i++) {
-      const recipe = filteredCardArray[i];
-      const filteredCard = filteredCardFactory(recipe);
+      const card = filteredCardArray[i];
+      const filteredCard = filteredCardFactory(card);
       const filteredCardDOM = filteredCard.getFilteredCardDOM();
       filteredCardContainer.appendChild(filteredCardDOM);
     }
 
+    // Affichage du message d'erreur si aucune carte filtrée n'est trouvée
     if (filteredCardArray.length === 0) {
       errorMessage.style.display = "block";
       filteredCardContainer.innerHTML = "";
@@ -293,28 +309,31 @@ function searchByTagAlgo() {
     }
   }
 
+  // Affichage des conteneurs appropriés en fonction des tags de recherche
   if (searchTags.length >= 1) {
     recipesContainer.style.display = "none";
-    filteredCardContainer.style.display = "grid"; 
+    filteredCardContainer.style.display = "grid";
   } else {
-    recipesContainer.style.display = "grid"; 
-    filteredCardContainer.style.display = "none"; 
+    recipesContainer.style.display = "grid";
+    filteredCardContainer.style.display = "none";
     errorMessage.style.display = "none";
   }
 
+  // Si aucun tag de recherche n'est présent, réinitialiser la recherche principale
   if (searchTags.length < 1) {
     filteredCardContainer.innerHTML = "";
     searchAlgo();
   }
 }
 
-
 /**** Fonction pour mettre à jour les résultats de recherche après la suppression ou l'ajout d'un tag ****/
 function updateFilteredResults() {
   filteredCardArray = [];
   const searchDish = searchBar.value.toLowerCase();
-  const filteredCardContainer = document.querySelector(".filtered-card-container");
-  const errorMessage = document.querySelector("#error-search"); 
+  const filteredCardContainer = document.querySelector(
+    ".filtered-card-container"
+  );
+  const errorMessage = document.querySelector("#error-search");
 
   getRecipes().then((data) => {
     const recipesList = data.recipes;
@@ -335,9 +354,7 @@ function updateFilteredResults() {
                 ingredient.ingredient.toLowerCase().includes(tag)
               ) ||
               appliance.toLowerCase().includes(tag) ||
-              ustensils.some((ustensil) =>
-                ustensil.toLowerCase().includes(tag)
-              )
+              ustensils.some((ustensil) => ustensil.toLowerCase().includes(tag))
             );
           })
         ) {
@@ -346,7 +363,7 @@ function updateFilteredResults() {
       }
     } else {
       // Si aucun tag n'est sélectionné, toutes les recettes sont considérées comme filtrées
-      filteredRecipes = recipesList; 
+      filteredRecipes = recipesList;
     }
 
     if (searchDish.length >= 3) {
@@ -419,6 +436,7 @@ const debouncedSearchBar = debounce(function () {
     filteredCardContainer.style.display = "none";
     errorMessage.style.display = "none";
     filteredCardArray = [];
+    searchAlgo();
   }
 }, searchDelay);
 
@@ -449,6 +467,7 @@ function removeTag(tagText) {
       removed = true;
       break; // Sortie de la boucle après la suppression du tag
     }
+    updateFilteredResults();
   }
 
   if (!removed) {
@@ -464,6 +483,7 @@ function removeTag(tagText) {
         removed = true;
         break;
       }
+      updateFilteredResults();
     }
   }
 
@@ -479,6 +499,7 @@ function removeTag(tagText) {
         tagArray = tagArray.filter((tag) => tag !== tagText);
         break;
       }
+      updateFilteredResults();
     }
   }
 
@@ -488,6 +509,10 @@ function removeTag(tagText) {
   } else {
     filteredCardContainer.innerHTML = "";
     searchAlgo();
+  }
+
+  if (tagArray.length === 0) {
+    updateFilteredResults();
   }
 
   // Mettre à jour les résultats de recherche après la suppression d'un tag
