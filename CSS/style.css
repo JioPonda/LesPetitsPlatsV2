@@ -52,12 +52,12 @@ header input {
 .fa-magnifying-glass {
   font-size: 40px;
   position: absolute;
-  margin: 160px 0 0 85vw;
+  margin: 40px 0 0 85vw;
 }
 
 #error-search {
   display: none;
-  margin: 5px 0 0 -41vw;
+  margin: 15px 0 0 0vw;
   color: #d04f4f;
 }
 
@@ -495,7 +495,7 @@ header input {
 
   .fa-magnifying-glass {
     font-size: 30px;
-    margin: 163px 0 0 83vw;
+    margin: 45px 0 0 85vw;
   }
 
   .search-zone {
@@ -504,7 +504,7 @@ header input {
 
   #error-search {
     display: none;
-    margin: 5px 0 0 -27vw;
+    margin: 15px 0 0 0vw;
   }
 
   .card-title {
@@ -575,11 +575,11 @@ header input {
 
   .fa-magnifying-glass {
     font-size: 30px;
-    margin: 163px 0 0 86vw;
+    margin: 45px 0 0 86vw;
   }
 
   #error-search {
-    margin: 5px 0 0 -2vw;
+    margin: 15px 0 0 0vw;
   }
 
   #tag-liste {
@@ -746,7 +746,7 @@ header input {
 
   .fa-magnifying-glass {
     font-size: 40px;
-    margin: 233px 0 0 79vw;
+    margin: 45px 0 0 83vw;
   }
 
   #error-search {
@@ -1048,8 +1048,8 @@ header input {
   }
 
   .fa-magnifying-glass {
-    font-size: 30px;
-    margin: 241px 0 0 76vw;
+    font-size: 35px;
+    margin: 45px 0 0 78vw;
   }
 
   #error-search {
@@ -1190,7 +1190,7 @@ header input {
 
   .fa-magnifying-glass {
     font-size: 30px;
-    margin: 180px 0 0 77vw;
+    margin: 50px 0 0 81vw;
   }
 
   .card-title {
