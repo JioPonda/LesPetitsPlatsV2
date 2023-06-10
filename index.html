@@ -37,14 +37,16 @@
     <header>
       <img src="assets/LOGO.png" alt="Logo du site 'Les petits plats'">
       <h1>Les petits plats</h1>
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input
-        id="searchbar"
-        type="text"
-        name="search"
-        placeholder="Rechercher une recette"
-        onclick="hideIngredientList (), hideUstensilesList (),hideAppareilsList ()"
-      >
+      <div>
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+          id="searchbar"
+          type="text"
+          name="search"
+          placeholder="Rechercher une recette"
+          onclick="hideIngredientList (), hideUstensilesList (),hideAppareilsList ()"
+        >
+      </div>
       <p id="error-search">
         « Aucune recette ne correspond à votre critère… vous pouvez chercher «
         tarte aux pommes », « poisson », etc.
