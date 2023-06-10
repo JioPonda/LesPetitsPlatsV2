@@ -424,12 +424,13 @@ function debounce(func, delay) {
   };
 }
 
-const searchDelay = 350; // Temps de temporisation en ms
+const searchDelay = 280; // Temps de temporisation en ms
 
 const debouncedSearchBar = debounce(function () {
   const searchDish = searchBar.value.toLowerCase();
   if (searchDish.length >= 3) {
     filteredCardContainer.innerHTML = "";
+    searchAlgo();
   } else {
     recipesContainer.style.display = "grid";
     filteredCardContainer.style.display = "none";
