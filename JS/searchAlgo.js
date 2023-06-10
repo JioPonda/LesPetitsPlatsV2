@@ -353,6 +353,7 @@ const debouncedSearchBar = debounce(function () {
   const searchDish = searchBar.value.toLowerCase();
   if (searchDish.length >= 3) {
     filteredCardContainer.innerHTML = "";
+    searchAlgo();
   } else {
     recipesContainer.style.display = "grid";
     filteredCardContainer.style.display = "none";
